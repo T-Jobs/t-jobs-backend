@@ -113,7 +113,7 @@ INSERT INTO interview (interview_type_id, track_id, interviewer_id, date_picked,
     (1, 1, NULL, NULL, FALSE, NULL, FALSE, 3),
     (3, 2, 1, '2024-09-12 10:30:00', TRUE, 'Overqualified', FALSE, 1);
 
-CREATE TABLE interview_type_stuff (
+CREATE TABLE interview_type_staff (
     interview_type_id   BIGINT UNSIGNED NOT NULL,
     staff_id            BIGINT UNSIGNED NOT NULL,
 
@@ -123,7 +123,7 @@ CREATE TABLE interview_type_stuff (
     FOREIGN KEY (staff_id)          REFERENCES staff(id)
 );
 
-INSERT INTO interview_type_stuff (interview_type_id, staff_id) VALUES
+INSERT INTO interview_type_staff (interview_type_id, staff_id) VALUES
     (1, 3), (2, 3), (3, 1);
 
 CREATE TABLE interview_base (

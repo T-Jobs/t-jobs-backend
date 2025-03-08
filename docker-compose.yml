@@ -21,4 +21,4 @@ services:
       - MYSQL_ROOT_PASSWORD=mysql
       - MYSQL_DATABASE=t_jobs
     volumes:
-      - '/init.sql:/docker-entrypoint-initdb.d/init.sql'
+      - '.\init.sql:/docker-entrypoint-initdb.d/init.sql'
