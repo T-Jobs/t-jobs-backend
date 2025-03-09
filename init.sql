@@ -1,10 +1,10 @@
-CREATE DATABASE IF NOT EXISTS t_jobs CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS t_jobs;
 USE t_jobs;
 
 CREATE TABLE staff (
     id          SERIAL,
-    name        VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    surname     VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    name        VARCHAR(100) NOT NULL,
+    surname     VARCHAR(100),
     photo_url   TEXT,
 
     PRIMARY KEY (id)
@@ -17,8 +17,8 @@ INSERT INTO staff (name, surname, photo_url) VALUES
 
 CREATE TABLE credentials (
     staff_id    BIGINT UNSIGNED NOT NULL UNIQUE,
-    login       VARCHAR(50)     CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE ,
-    password    TEXT            CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    login       VARCHAR(50)     NOT NULL UNIQUE ,
+    password    TEXT            NOT NULL,
     is_hr       BOOLEAN,
     is_tl       BOOLEAN,
     is_interviewer   BOOLEAN,
@@ -35,10 +35,10 @@ INSERT INTO credentials (staff_id, login, password, is_hr, is_tl, is_interviewer
 
 CREATE TABLE candidate (
     id      SERIAL,
-    name    VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    surname VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
-    tg_id   VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
-    town    VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
+    name    VARCHAR(50) NOT NULL,
+    surname VARCHAR(50) ,
+    tg_id   VARCHAR(50) ,
+    town    VARCHAR(50) ,
 
     PRIMARY KEY (id)
 );
@@ -82,7 +82,7 @@ INSERT INTO track (hr_id, candidate_id, vacancy_id, last_status) VALUES
 
 CREATE TABLE interview_type (
     id SERIAL,
-    name VARCHAR(100)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE,
+    name VARCHAR(100)  NOT NULL UNIQUE,
 
     PRIMARY KEY(id)
 );
@@ -98,7 +98,7 @@ CREATE TABLE interview (
     interviewer_id      BIGINT UNSIGNED,
     date_picked         TIMESTAMP,
     date_approved       BOOLEAN DEFAULT FALSE,
-    feedback            TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
+    feedback            TEXT ,
     status              ENUM('FAILED', 'SUCCESS', 'WAITING_FEEDBACK', 'TIME_APPROVAL', 'NONE'),
 
     PRIMARY KEY (id),
@@ -158,7 +158,7 @@ INSERT INTO staff_vacancy (staff_id, vacancy_id) VALUES
 CREATE TABLE tag (
     id          SERIAL,
     category    ENUM('type1', 'type2'),
-    name        VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
+    name        VARCHAR(50) ,
 
     PRIMARY KEY (id)
 );
@@ -183,7 +183,7 @@ CREATE TABLE resume (
     id              SERIAL,
     candidate_id    BIGINT UNSIGNED NOT NULL,
     salary_min      INT,
-    description     TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
+    description     TEXT ,
 
     PRIMARY KEY(id),
 

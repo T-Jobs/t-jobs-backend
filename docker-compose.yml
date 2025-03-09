@@ -6,7 +6,7 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/t_jobs?useUnicode=true&character_set_server=utf8mb4
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/t_jobs?useUnicode=true&characterEncoding=UTF-8
     ports:
       - "8080:8080"
     restart: always
@@ -18,6 +18,7 @@ services:
       - MYSQL_DATABASE=t_jobs
       - MYSQL_CHARSET=utf8mb4
       - MYSQL_COLLATION=utf8mb4_unicode_ci
+      - LANG=C.UTF-8
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
