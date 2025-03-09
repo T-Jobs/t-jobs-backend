@@ -2,7 +2,7 @@ package ru.ns.t_jobs.auth.user;
 
 import org.springframework.security.core.GrantedAuthority;
 
-enum Roles implements GrantedAuthority {
+public enum Roles implements GrantedAuthority {
     HR, TL, INTERVIEWER;
 
     @Override

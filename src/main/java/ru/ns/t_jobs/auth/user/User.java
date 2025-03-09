@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -33,15 +32,15 @@ public class User implements UserDetails {
     @Column(name = "is_tl")
     private Boolean isTl;
 
-    @Column(name = "is_interv")
-    private Boolean isInterv;
+    @Column(name = "is_interviewer")
+    private Boolean isInterviewer;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<Roles> roles = new ArrayList<>();
         if (isHr) roles.add(Roles.HR);
         if (isTl) roles.add(Roles.TL);
-        if (isInterv) roles.add(Roles.INTERVIEWER);
+        if (isInterviewer) roles.add(Roles.INTERVIEWER);
 
         return roles;
     }

@@ -1,10 +1,10 @@
-CREATE DATABASE IF NOT EXISTS t_jobs;
+CREATE DATABASE IF NOT EXISTS t_jobs CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE t_jobs;
 
 CREATE TABLE staff (
     id          SERIAL,
-    name        VARCHAR(100) NOT NULL,
-    surname     VARCHAR(100),
+    name        VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    surname     VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     photo_url   TEXT,
 
     PRIMARY KEY (id)
@@ -17,28 +17,28 @@ INSERT INTO staff (name, surname, photo_url) VALUES
 
 CREATE TABLE credentials (
     staff_id    BIGINT UNSIGNED NOT NULL UNIQUE,
-    login       VARCHAR(50)     NOT NULL UNIQUE,
-    password    TEXT            NOT NULL,
+    login       VARCHAR(50)     CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE ,
+    password    TEXT            CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     is_hr       BOOLEAN,
     is_tl       BOOLEAN,
-    is_interv   BOOLEAN,
+    is_interviewer   BOOLEAN,
 
     PRIMARY KEY (staff_id),
 
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
 
-INSERT INTO credentials (staff_id, login, password, is_hr, is_tl, is_interv) VALUES
+INSERT INTO credentials (staff_id, login, password, is_hr, is_tl, is_interviewer) VALUES
     (1, 'hr1',     '$2a$10$CkXp/VOHNfd7Efk0KJDV1uRzBiZa8c4aBL5EIfvTkvrLBTWOyOSce', 1, 0, 0),     -- pass: 1234
     (2, 'tl1',     '$2a$10$i5MSqQkWiOmu.Zd5OJ7U1uLG0n/MflVmFqcwyognunCjI2BaIiuPi', 0, 1, 0),     -- pass: 4321
     (3, 'interv1', '$2a$10$5jOI0NE3rgcMSRT1kjouFuYIx9.cQXMfHq6oQ2yca5BWIk3tjEG8G', 0, 0, 1);     -- pass: 1243
 
 CREATE TABLE candidate (
     id      SERIAL,
-    name    VARCHAR(50) NOT NULL,
-    surname VARCHAR(50),
-    tg_id   VARCHAR(50),
-    town    VARCHAR(50), 
+    name    VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    surname VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
+    tg_id   VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
+    town    VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
 
     PRIMARY KEY (id)
 );
@@ -67,6 +67,7 @@ CREATE TABLE track (
     hr_id           BIGINT UNSIGNED NOT NULL,
     candidate_id    BIGINT UNSIGNED NOT NULL,
     vacancy_id      BIGINT UNSIGNED NOT NULL,
+    last_status     ENUM('FAILED', 'SUCCESS', 'WAITING_FEEDBACK', 'TIME_APPROVAL', 'NONE'),
 
     PRIMARY KEY(id),
 
@@ -75,13 +76,13 @@ CREATE TABLE track (
     FOREIGN KEY (vacancy_id)    REFERENCES vacancy(id)
 );
 
-INSERT INTO track (hr_id, candidate_id, vacancy_id) VALUES
-    (1, 1, 1),    
-    (1, 2, 2);   
+INSERT INTO track (hr_id, candidate_id, vacancy_id, last_status) VALUES
+    (1, 1, 1, 'TIME_APPROVAL'),
+    (1, 2, 2, 'FAILED');
 
 CREATE TABLE interview_type (
     id SERIAL,
-    name VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(100)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE,
 
     PRIMARY KEY(id)
 );
@@ -97,8 +98,8 @@ CREATE TABLE interview (
     interviewer_id      BIGINT UNSIGNED,
     date_picked         TIMESTAMP,
     date_approved       BOOLEAN DEFAULT FALSE,
-    feedback            TEXT,
-    success             BOOLEAN DEFAULT FALSE,
+    feedback            TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
+    status              ENUM('FAILED', 'SUCCESS', 'WAITING_FEEDBACK', 'TIME_APPROVAL', 'NONE'),
 
     PRIMARY KEY (id),
 
@@ -107,11 +108,11 @@ CREATE TABLE interview (
     FOREIGN KEY (interviewer_id)    REFERENCES staff(id)
 );
 
-INSERT INTO interview (interview_type_id, track_id, interviewer_id, date_picked, date_approved, feedback, success, interview_order) VALUES
-    (3, 1, 1, '2024-10-01 12:23:00', TRUE, 'Нормально', TRUE, 1),    
-    (2, 1, 3, '2025-10-02 17:45:00', FALSE, NULL, FALSE, 2),
-    (1, 1, NULL, NULL, FALSE, NULL, FALSE, 3),
-    (3, 2, 1, '2024-09-12 10:30:00', TRUE, 'Overqualified', FALSE, 1);
+INSERT INTO interview (interview_type_id, track_id, interviewer_id, date_picked, date_approved, feedback, interview_order, status) VALUES
+    (3, 1, 1, '2024-10-01 12:23:00', TRUE, 'Нормально', 1, 'SUCCESS'),
+    (2, 1, 3, '2025-10-02 17:45:00', FALSE, NULL, 2, 'TIME_APPROVAL'),
+    (1, 1, NULL, NULL, FALSE, NULL, 3, 'NONE'),
+    (3, 2, 1, '2024-09-12 10:30:00', TRUE, 'Overqualified', 1, 'FAILED');
 
 CREATE TABLE interview_type_staff (
     interview_type_id   BIGINT UNSIGNED NOT NULL,
@@ -157,7 +158,7 @@ INSERT INTO staff_vacancy (staff_id, vacancy_id) VALUES
 CREATE TABLE tag (
     id          SERIAL,
     category    ENUM('type1', 'type2'),
-    name        VARCHAR(50),
+    name        VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
 
     PRIMARY KEY (id)
 );
@@ -182,7 +183,7 @@ CREATE TABLE resume (
     id              SERIAL,
     candidate_id    BIGINT UNSIGNED NOT NULL,
     salary_min      INT,
-    `description`     TEXT,
+    description     TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
 
     PRIMARY KEY(id),
 
