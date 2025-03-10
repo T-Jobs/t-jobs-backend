@@ -218,7 +218,7 @@ INSERT INTO vacancy_tag (vacancy_id, tag_id) VALUES
 CREATE TABLE resume (
     id              SERIAL,
     candidate_id    BIGINT UNSIGNED NOT NULL,
-    salary_min      INT,
+    salary_min      INT DEFAULT 0,
     description     TEXT ,
 
     PRIMARY KEY(id),

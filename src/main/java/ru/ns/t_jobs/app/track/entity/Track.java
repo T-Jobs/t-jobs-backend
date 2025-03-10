@@ -2,7 +2,7 @@ package ru.ns.t_jobs.app.track.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import ru.ns.t_jobs.app.candidate.Candidate;
+import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.staff.entity.Staff;

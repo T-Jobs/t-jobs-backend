@@ -1,4 +1,4 @@
-package ru.ns.t_jobs.app.candidate;
+package ru.ns.t_jobs.app.candidate.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

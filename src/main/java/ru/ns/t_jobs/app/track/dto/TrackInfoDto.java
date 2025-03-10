@@ -1,7 +1,7 @@
 package ru.ns.t_jobs.app.track.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.ns.t_jobs.app.candidate.CandidateDto;
+import ru.ns.t_jobs.app.candidate.dto.CandidateDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.vacancy.VacancyDto;

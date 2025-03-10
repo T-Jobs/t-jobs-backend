@@ -47,8 +47,9 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<VacancyDto> getUserVacancies() {
         Credentials principal = (Credentials) AuthUtils.getCurrentUserDetails();
-        return staffRepository.getReferenceById(principal.getStaffId()).getVacancies()
-                .stream().map(VacancyConvertor::from).toList();
+        return VacancyConvertor.from(
+                staffRepository.getReferenceById(principal.getStaffId()).getVacancies()
+        );
     }
 
     @Override

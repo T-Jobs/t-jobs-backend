@@ -1,4 +1,4 @@
-package ru.ns.t_jobs.app.candidate;
+package ru.ns.t_jobs.app.candidate.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

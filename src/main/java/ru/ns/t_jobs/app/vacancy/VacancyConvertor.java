@@ -4,6 +4,8 @@ import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;
 
+import java.util.List;
+
 public class VacancyConvertor {
     public static VacancyDto from(Vacancy v) {
         return new VacancyDto(
@@ -18,5 +20,9 @@ public class VacancyConvertor {
                 v.getStaff().stream().map(Staff::getId).toList(),
                 v.getTracks().stream().map(Track::getId).toList()
         );
+    }
+
+    public static List<VacancyDto> from(List<Vacancy> v) {
+        return v.stream().map(VacancyConvertor::from).toList();
     }
 }

@@ -15,7 +15,7 @@ public class Interview {
     private long id;
 
     @Column(name = "interview_order", nullable = false)
-    private Integer interviewOrder;
+    private int interviewOrder;
 
     @ManyToOne
     @JoinColumn(name = "interview_type_id", referencedColumnName = "id", nullable = false)
