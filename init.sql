@@ -1,6 +1,16 @@
 CREATE DATABASE IF NOT EXISTS t_jobs;
 USE t_jobs;
 
+CREATE TABLE role (
+    id          SERIAL,
+    name        VARCHAR(50) NOT NULL,
+
+    PRIMARY KEY (id)
+);
+
+INSERT INTO role (name) VALUES
+    ('HR'), ('TL'), ('INTERVIEWER');
+
 CREATE TABLE staff (
     id          SERIAL,
     name        VARCHAR(100) NOT NULL,
@@ -15,30 +25,41 @@ INSERT INTO staff (name, surname, photo_url) VALUES
     ('Эрих', 'Ремарк', 'https://brsbs.ru/sites/default/files/news/images/erih-mariya-remark.jpg'),    
     ('Байрон', 'Депампадур', 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Boucher_Pompadour_Munich_04.jpg/800px-Boucher_Pompadour_Munich_04.jpg');     
 
+CREATE TABLE staff_role (
+    staff_id    BIGINT UNSIGNED NOT NULL,
+    role_id     BIGINT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (staff_id, role_id),
+
+    FOREIGN KEY (staff_id) REFERENCES staff(id),
+    FOREIGN KEY (role_id) REFERENCES role(id)
+);
+
+INSERT INTO staff_role (staff_id, role_id) VALUES
+    (1, 1), (2, 2), (3, 3);
+
 CREATE TABLE credentials (
     staff_id    BIGINT UNSIGNED NOT NULL UNIQUE,
-    login       VARCHAR(50)     NOT NULL UNIQUE ,
+    login       VARCHAR(50)     NOT NULL UNIQUE,
     password    TEXT            NOT NULL,
-    is_hr       BOOLEAN,
-    is_tl       BOOLEAN,
-    is_interviewer   BOOLEAN,
 
     PRIMARY KEY (staff_id),
 
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
 
-INSERT INTO credentials (staff_id, login, password, is_hr, is_tl, is_interviewer) VALUES
-    (1, 'hr1',     '$2a$10$CkXp/VOHNfd7Efk0KJDV1uRzBiZa8c4aBL5EIfvTkvrLBTWOyOSce', 1, 0, 0),     -- pass: 1234
-    (2, 'tl1',     '$2a$10$i5MSqQkWiOmu.Zd5OJ7U1uLG0n/MflVmFqcwyognunCjI2BaIiuPi', 0, 1, 0),     -- pass: 4321
-    (3, 'interv1', '$2a$10$5jOI0NE3rgcMSRT1kjouFuYIx9.cQXMfHq6oQ2yca5BWIk3tjEG8G', 0, 0, 1);     -- pass: 1243
+INSERT INTO credentials (staff_id, login, password) VALUES
+    (1, 'hr1',     '$2a$10$CkXp/VOHNfd7Efk0KJDV1uRzBiZa8c4aBL5EIfvTkvrLBTWOyOSce'),     -- pass: 1234
+    (2, 'tl1',     '$2a$10$i5MSqQkWiOmu.Zd5OJ7U1uLG0n/MflVmFqcwyognunCjI2BaIiuPi'),     -- pass: 4321
+    (3, 'interv1', '$2a$10$5jOI0NE3rgcMSRT1kjouFuYIx9.cQXMfHq6oQ2yca5BWIk3tjEG8G');     -- pass: 1243
 
 CREATE TABLE candidate (
-    id      SERIAL,
-    name    VARCHAR(50) NOT NULL,
-    surname VARCHAR(50) ,
-    tg_id   VARCHAR(50) ,
-    town    VARCHAR(50) ,
+    id          SERIAL,
+    name        VARCHAR(50) NOT NULL,
+    surname     VARCHAR(50) ,
+    photo_url   TEXT,
+    tg_id       VARCHAR(50) ,
+    town        VARCHAR(50) ,
 
     PRIMARY KEY (id)
 );
@@ -52,13 +73,14 @@ CREATE TABLE vacancy (
     id          SERIAL,
     name        VARCHAR(100) NOT NULL,
     description TEXT,
-    salary      INT,
+    salary_min  INT DEFAULT 0,
+    salary_max  INT DEFAULT 0,
     town        VARCHAR(50),
 
     PRIMARY KEY(id)
 );
 
-INSERT INTO vacancy (name, description, salary, town) VALUES
+INSERT INTO vacancy (name, description, salary_max, town) VALUES
     ('Java-разработчик', 'Какое-то описание типичного пещерного джависта', 50, 'Javaland'),    
     ('Kotlin-рофлер', 'Я свинка пепа. *** ** ***', 666666, 'Kotlyandiya');   
 
@@ -77,8 +99,8 @@ CREATE TABLE track (
 );
 
 INSERT INTO track (hr_id, candidate_id, vacancy_id, last_status) VALUES
-    (1, 1, 1, 'TIME_APPROVAL'),
-    (1, 2, 2, 'FAILED');
+    (1, 2, 2, 'TIME_APPROVAL'),
+    (1, 1, 1, 'FAILED');
 
 CREATE TABLE interview_type (
     id SERIAL,
@@ -155,16 +177,28 @@ CREATE TABLE staff_vacancy (
 INSERT INTO staff_vacancy (staff_id, vacancy_id) VALUES
     (1, 1), (1, 2), (2, 1), (2, 2);
 
-CREATE TABLE tag (
+CREATE TABLE tag_category (
     id          SERIAL,
-    category    ENUM('type1', 'type2'),
-    name        VARCHAR(50) ,
+    name        VARCHAR(50),
 
     PRIMARY KEY (id)
 );
 
-INSERT INTO tag (category, name) VALUES
-    ('type1', 'Java'), ('type1', 'Sql'), ('type1', 'Kotlin');
+INSERT INTO tag_category (name) VALUES
+    ('type1'), ('type2');
+
+CREATE TABLE tag (
+    id          SERIAL,
+    category_id    BIGINT UNSIGNED NOT NULL,
+    name        VARCHAR(50) ,
+
+    PRIMARY KEY (id),
+
+    FOREIGN KEY (category_id)   REFERENCES tag_category(id)
+);
+
+INSERT INTO tag (category_id, name) VALUES
+    (1, 'Java'), (2, 'Sql'), (1, 'Kotlin');
 
 CREATE TABLE vacancy_tag (
     vacancy_id  BIGINT UNSIGNED NOT NULL,

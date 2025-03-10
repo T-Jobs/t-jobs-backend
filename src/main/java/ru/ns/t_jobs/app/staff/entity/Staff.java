@@ -2,8 +2,12 @@ package ru.ns.t_jobs.app.staff.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
-import ru.ns.t_jobs.app.track.Track;
+import ru.ns.t_jobs.app.track.entity.Track;
+import ru.ns.t_jobs.app.vacancy.Vacancy;
+import ru.ns.t_jobs.auth.user.Credentials;
+import ru.ns.t_jobs.auth.user.Role;
 
 import java.util.List;
 
@@ -35,4 +39,23 @@ public class Staff {
             inverseJoinColumns = @JoinColumn(name = "interview_type_id")
     )
     private List<InterviewType> interviewTypes;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "interviewer")
+    private List<Interview> interviews;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "staff_vacancy",
+            joinColumns = @JoinColumn(name = "staff_id"),
+            inverseJoinColumns = @JoinColumn(name = "vacancy_id")
+    )
+    private List<Vacancy> vacancies;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "staff_role",
+            joinColumns = @JoinColumn(name = "staff_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 }

@@ -7,20 +7,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.auth.dto.AuthenticationRequest;
 import ru.ns.t_jobs.auth.token.JwtTokenUtils;
-import ru.ns.t_jobs.auth.user.User;
-import ru.ns.t_jobs.auth.user.UserRepository;
+import ru.ns.t_jobs.auth.user.Credentials;
+import ru.ns.t_jobs.auth.user.CredentialsRepository;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService {
-    private final UserRepository userRepository;
+    private final CredentialsRepository credentialsRepository;
     private final AuthenticationManager authenticationManager;
 
     @Override
     public String login(AuthenticationRequest request) {
-        Optional<User> userOp = userRepository.findByLogin(request.login());
+        Optional<Credentials> userOp = credentialsRepository.findByLogin(request.login());
         if (userOp.isEmpty()) throw new BadCredentialsException("");
 
         authenticationManager.authenticate(
@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
                 )
         );
 
-        User user = userOp.orElseThrow();
-        return JwtTokenUtils.generateToken(user);
+        Credentials credentials = userOp.orElseThrow();
+        return JwtTokenUtils.generateToken(credentials);
     }
 }

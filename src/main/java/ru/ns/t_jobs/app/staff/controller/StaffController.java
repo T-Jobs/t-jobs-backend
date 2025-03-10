@@ -3,7 +3,7 @@ package ru.ns.t_jobs.app.staff.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
-import ru.ns.t_jobs.auth.user.Roles;
+import ru.ns.t_jobs.auth.user.Role;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ public interface StaffController {
     StaffInfoDto getUserInfo();
 
     @GetMapping("/roles")
-    List<Roles> getUserRoles();
+    List<Role> getUserRoles();
 }

@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.ns.t_jobs.auth.user.User;
+import ru.ns.t_jobs.auth.user.Credentials;
 import ru.ns.t_jobs.handler.dto.ExceptionResponse;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestControllerAdvice
@@ -32,13 +33,21 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
         return new ExceptionResponse("Wrong login or password", id);
     }
 
+    @ExceptionHandler({NoSuchElementException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse notFoundException(NoSuchElementException e) {
+        long id = atomicLong.getAndIncrement();
+        log(e.getMessage(), id, HttpStatus.NOT_FOUND);
+        return new ExceptionResponse(e.getMessage(), id);
+    }
+
     private void log(String msg, long id, HttpStatus status) {
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         logger.log(
                 REQUEST_LEVEL, String.format("%30s %8s %20s %20s %d %d %s FAIL",
-                principal instanceof User ? ((User) principal).getLogin() : principal,
+                principal instanceof Credentials ? ((Credentials) principal).getLogin() : principal,
                 request.getMethod(),
                 request.getServletPath(),
                 status.name(),

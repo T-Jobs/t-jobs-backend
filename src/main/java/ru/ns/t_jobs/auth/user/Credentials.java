@@ -1,13 +1,15 @@
 package ru.ns.t_jobs.auth.user;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.ns.t_jobs.app.staff.entity.Staff;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -15,7 +17,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "Credentials")
-public class User implements UserDetails {
+public class Credentials implements UserDetails {
     @Id
     @Column(name = "staff_id")
     private long staffId;
@@ -26,23 +28,13 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "is_hr")
-    private Boolean isHr;
-
-    @Column(name = "is_tl")
-    private Boolean isTl;
-
-    @Column(name = "is_interviewer")
-    private Boolean isInterviewer;
+    @OneToOne
+    @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable = false)
+    private Staff staff;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Roles> roles = new ArrayList<>();
-        if (isHr) roles.add(Roles.HR);
-        if (isTl) roles.add(Roles.TL);
-        if (isInterviewer) roles.add(Roles.INTERVIEWER);
-
-        return roles;
+    public Collection<Role> getAuthorities() {
+        return staff.getRoles();
     }
 
     @Override

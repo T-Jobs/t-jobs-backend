@@ -1,11 +1,14 @@
-package ru.ns.t_jobs.app.track;
+package ru.ns.t_jobs.app.track.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import ru.ns.t_jobs.app.candidate.Candidate;
+import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.vacancy.Vacancy;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -32,4 +35,7 @@ public class Track {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vacancy_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Vacancy vacancy;
+
+    @OneToMany(mappedBy = "track")
+    private List<Interview> interviews;
 }

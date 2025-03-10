@@ -1,10 +1,13 @@
 package ru.ns.t_jobs.app.vacancy;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
+import ru.ns.t_jobs.app.Tag;
+import ru.ns.t_jobs.app.interview.entity.InterviewBase;
+import ru.ns.t_jobs.app.staff.entity.Staff;
+import ru.ns.t_jobs.app.track.entity.Track;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -19,9 +22,29 @@ public class Vacancy {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "salary")
-    private Integer salary;
+    @Column(name = "salary_min")
+    private int salaryMin;
+
+    @Column(name = "salary_max")
+    private int salaryMax;
 
     @Column(name = "town", length = 50)
     private String town;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vacancy")
+    private List<InterviewBase> interviewBases;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "vacancy_tag",
+            joinColumns = @JoinColumn(name = "vacancy_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
+
+    @ManyToMany(mappedBy = "vacancies")
+    private List<Staff> staff;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vacancy")
+    private List<Track> tracks;
 }

@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.ns.t_jobs.auth.dto.AuthenticationRequest;
 import ru.ns.t_jobs.auth.dto.AuthenticationResponse;
 import ru.ns.t_jobs.auth.service.LoginService;
-import ru.ns.t_jobs.auth.user.UserRepository;
+import ru.ns.t_jobs.auth.user.CredentialsRepository;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthControllerImpl implements AuthController {
 
-    private final UserRepository userRepository;
+    private final CredentialsRepository credentialsRepository;
     private final LoginService loginService;
 
     @Override

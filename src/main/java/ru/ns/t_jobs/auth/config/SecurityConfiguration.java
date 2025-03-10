@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.ns.t_jobs.auth.token.JwtTokenFilter;
-import ru.ns.t_jobs.auth.user.UserRepository;
+import ru.ns.t_jobs.auth.user.CredentialsRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +28,7 @@ import ru.ns.t_jobs.auth.user.UserRepository;
 @EnableWebMvc
 public class SecurityConfiguration implements WebMvcConfigurer {
 
-    private final UserRepository userRepository;
+    private final CredentialsRepository credentialsRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
@@ -47,7 +47,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return login -> userRepository.findByLogin(login)
+        return login -> credentialsRepository.findByLogin(login)
                 .orElseThrow(RuntimeException::new);
     }
 
@@ -69,7 +69,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public JwtTokenFilter jwtTokenFilter(UserRepository userRepository, UserDetailsService userDetailsService) {
-        return new JwtTokenFilter(userRepository, userDetailsService);
+    public JwtTokenFilter jwtTokenFilter(CredentialsRepository credentialsRepository, UserDetailsService userDetailsService) {
+        return new JwtTokenFilter(credentialsRepository, userDetailsService);
     }
 }

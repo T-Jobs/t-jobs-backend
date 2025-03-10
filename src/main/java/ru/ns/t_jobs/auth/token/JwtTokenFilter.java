@@ -10,8 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.ns.t_jobs.auth.user.User;
-import ru.ns.t_jobs.auth.user.UserRepository;
+import ru.ns.t_jobs.auth.user.Credentials;
+import ru.ns.t_jobs.auth.user.CredentialsRepository;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -21,7 +21,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String HEADER_NAME = "Authorization";
 
-    private final UserRepository userRepository;
+    private final CredentialsRepository credentialsRepository;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -47,7 +47,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        Optional<User> user = userRepository.findByLogin(decodedToken.getSubject());
+        Optional<Credentials> user = credentialsRepository.findByLogin(decodedToken.getSubject());
         if (user.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.get().getUsername());
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

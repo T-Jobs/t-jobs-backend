@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.staff.service.StaffService;
-import ru.ns.t_jobs.auth.user.Roles;
+import ru.ns.t_jobs.auth.user.Role;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class StaffControllerImpl implements StaffController {
     }
 
     @Override
-    public List<Roles> getUserRoles() {
+    public List<Role> getUserRoles() {
         return staffService.getUserRoles();
     }
 }
