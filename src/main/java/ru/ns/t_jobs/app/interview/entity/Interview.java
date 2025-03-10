@@ -2,7 +2,6 @@ package ru.ns.t_jobs.app.interview.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import ru.ns.t_jobs.app.TagCategory;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;
 
@@ -18,8 +17,9 @@ public class Interview {
     @Column(name = "interview_order", nullable = false)
     private Integer interviewOrder;
 
-    @Column(name = "interview_type_id", nullable = false)
-    private long interviewTypeId;
+    @ManyToOne
+    @JoinColumn(name = "interview_type_id", referencedColumnName = "id", nullable = false)
+    private InterviewType interviewType;
 
     @Column(name = "track_id", nullable = false)
     private long trackId;
@@ -40,6 +40,9 @@ public class Interview {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private InterviewStatus status;
+
+    @Column(name = "able_set_time")
+    private boolean ableSetTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "track_id", referencedColumnName = "id",
