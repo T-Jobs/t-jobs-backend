@@ -13,6 +13,7 @@ public record TrackInfoDto(
         StaffInfoDto hr,
         CandidateDto candidate,
         VacancyDto vacancy,
+        boolean finished,
         List<Long> interviews,
         @JsonProperty("last_status")
         InterviewStatus lastStatus

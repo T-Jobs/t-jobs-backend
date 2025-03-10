@@ -9,13 +9,25 @@ import java.time.LocalDateTime;
 
 public record InterviewDto(
         long id,
-        @JsonProperty("interviewer_id") long interviewerId,
+
+        @JsonProperty("interviewer_id")
+        long interviewerId,
+
         InterviewType interviewType,
-        @JsonProperty("track_id") long trackId,
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") @JsonProperty("date_picked") LocalDateTime datePicked,
+
+        @JsonProperty("track_id")
+        long trackId,
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonProperty("date_picked")
+        LocalDateTime datePicked,
+
         @JsonProperty("date_approved") boolean dateApproved,
         String feedback,
+
         InterviewStatus status,
-        @JsonProperty("able_set_time") boolean ableSetTime
+
+        @JsonProperty("able_set_time")
+        boolean ableSetTime
 ) {
 }

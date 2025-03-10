@@ -2,8 +2,11 @@ package ru.ns.t_jobs.app.staff.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
+import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.staff.service.StaffService;
+import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
+import ru.ns.t_jobs.app.vacancy.VacancyDto;
 import ru.ns.t_jobs.auth.user.Role;
 
 import java.util.List;
@@ -22,5 +25,20 @@ public class StaffControllerImpl implements StaffController {
     @Override
     public List<Role> getUserRoles() {
         return staffService.getUserRoles();
+    }
+
+    @Override
+    public List<InterviewDto> getUserInterviews(boolean onlyActual) {
+        return staffService.getUserInterviews(onlyActual);
+    }
+
+    @Override
+    public List<VacancyDto> getUserVacancies() {
+        return staffService.getUserVacancies();
+    }
+
+    @Override
+    public List<TrackInfoDto> getUserTracks(boolean onlyActual) {
+        return staffService.getHrTracks(onlyActual);
     }
 }

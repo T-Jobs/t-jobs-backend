@@ -6,10 +6,10 @@ import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.vacancy.Vacancy;
-import ru.ns.t_jobs.auth.user.Credentials;
 import ru.ns.t_jobs.auth.user.Role;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -57,5 +57,5 @@ public class Staff {
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    private Set<Role> roles;
 }

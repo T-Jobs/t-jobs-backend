@@ -14,6 +14,7 @@ public class TrackConvertor {
                 StaffConvertor.from(track.getHr()),
                 CandidateConvertor.from(track.getCandidate()),
                 VacancyConvertor.from(track.getVacancy()),
+                track.isFinished(),
                 track.getInterviews().stream().map(Interview::getId).toList(),
                 track.getLastStatus()
         );

@@ -90,6 +90,7 @@ CREATE TABLE track (
     candidate_id    BIGINT UNSIGNED NOT NULL,
     vacancy_id      BIGINT UNSIGNED NOT NULL,
     last_status     ENUM('FAILED', 'SUCCESS', 'WAITING_FEEDBACK', 'TIME_APPROVAL', 'NONE'),
+    finished        BOOLEAN,
 
     PRIMARY KEY(id),
 
@@ -98,9 +99,9 @@ CREATE TABLE track (
     FOREIGN KEY (vacancy_id)    REFERENCES vacancy(id)
 );
 
-INSERT INTO track (hr_id, candidate_id, vacancy_id, last_status) VALUES
-    (1, 2, 2, 'TIME_APPROVAL'),
-    (1, 1, 1, 'FAILED');
+INSERT INTO track (hr_id, candidate_id, vacancy_id, last_status, finished) VALUES
+    (1, 2, 2, 'TIME_APPROVAL', FALSE),
+    (1, 1, 1, 'FAILED', TRUE);
 
 CREATE TABLE interview_type (
     id SERIAL,

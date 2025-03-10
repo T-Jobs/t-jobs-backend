@@ -8,5 +8,5 @@ import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 @RequestMapping("/interview")
 public interface InterviewController {
     @GetMapping("/{id}")
-    public InterviewDto getInterviewById(@PathVariable("id") long id);
+    InterviewDto getInterviewById(@PathVariable("id") long id);
 }

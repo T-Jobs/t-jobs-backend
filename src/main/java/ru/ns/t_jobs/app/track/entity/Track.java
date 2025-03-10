@@ -17,6 +17,9 @@ public class Track {
     @Id
     private Long id;
 
+    @Column(name = "finished")
+    private boolean finished;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "last_status")
     private InterviewStatus lastStatus;
