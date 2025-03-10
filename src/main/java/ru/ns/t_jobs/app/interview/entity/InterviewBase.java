@@ -2,7 +2,7 @@ package ru.ns.t_jobs.app.interview.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import ru.ns.t_jobs.app.vacancy.Vacancy;
+import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 
 @Entity
 @Table(name = "interview_base")

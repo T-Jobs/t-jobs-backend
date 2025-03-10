@@ -1,24 +1,23 @@
-package ru.ns.t_jobs.app;
+package ru.ns.t_jobs.app.tag;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tag_category")
+@Table(name = "tag")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagCategory {
-
+public class Tag {
     @Id
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    private TagCategory category;
+
     @Column(name = "name", length = 50)
     private String name;
-
 }

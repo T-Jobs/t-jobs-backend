@@ -2,7 +2,7 @@ package ru.ns.t_jobs.app.candidate.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import ru.ns.t_jobs.app.Tag;
+import ru.ns.t_jobs.app.tag.Tag;
 
 import java.util.List;
 

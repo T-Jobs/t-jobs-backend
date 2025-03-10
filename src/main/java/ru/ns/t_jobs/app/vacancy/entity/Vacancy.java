@@ -1,8 +1,8 @@
-package ru.ns.t_jobs.app.vacancy;
+package ru.ns.t_jobs.app.vacancy.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import ru.ns.t_jobs.app.Tag;
+import ru.ns.t_jobs.app.tag.Tag;
 import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;

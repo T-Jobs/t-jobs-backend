@@ -5,5 +5,5 @@ import ru.ns.t_jobs.app.candidate.dto.CandidateDto;
 import java.util.List;
 
 public interface CandidateService {
-    List<CandidateDto> searchCandidates(int page, int page_size, int salaryUpperBound, List<Long> tagIds);
+    List<CandidateDto> searchCandidates(int page, int pageSize, int salaryUpperBound, List<Long> tagIds);
 }

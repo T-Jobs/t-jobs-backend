@@ -4,7 +4,7 @@ import ru.ns.t_jobs.app.candidate.dto.CandidateConvertor;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.staff.dto.StaffConvertor;
 import ru.ns.t_jobs.app.track.entity.Track;
-import ru.ns.t_jobs.app.vacancy.VacancyConvertor;
+import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 
 import java.util.Comparator;
 

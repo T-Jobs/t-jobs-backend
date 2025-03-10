@@ -1,8 +1,9 @@
-package ru.ns.t_jobs.app.vacancy;
+package ru.ns.t_jobs.app.vacancy.dto;
 
 import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;
+import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 
 import java.util.List;
 

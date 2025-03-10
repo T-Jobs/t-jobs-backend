@@ -1,6 +1,6 @@
-package ru.ns.t_jobs.app.vacancy;
+package ru.ns.t_jobs.app.vacancy.dto;
 
-import ru.ns.t_jobs.app.Tag;
+import ru.ns.t_jobs.app.tag.Tag;
 
 import java.util.List;
 

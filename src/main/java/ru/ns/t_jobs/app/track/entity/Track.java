@@ -6,7 +6,7 @@ import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.staff.entity.Staff;
-import ru.ns.t_jobs.app.vacancy.Vacancy;
+import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 
 import java.util.List;
 

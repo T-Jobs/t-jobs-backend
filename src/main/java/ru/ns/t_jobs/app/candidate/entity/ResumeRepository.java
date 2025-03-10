@@ -12,6 +12,7 @@ import java.util.List;
 public interface ResumeRepository extends PagingAndSortingRepository<Resume, Long> {
     @Query("SELECT distinct r.candidate FROM Resume r JOIN r.tags t WHERE t.id IN :tagIds AND r.salaryMin <= :salary GROUP BY r.id HAVING COUNT(t.id) >= :tagCount")
     List<Candidate> findAllByTags(@Param("tagIds") List<Long> tagIds, @Param("tagCount") long tagCount, @Param("salary") int upperBound, Pageable pageable);
-    @Query("SELECT distinct r.candidate FROM Resume r WHERE r.salaryMin <= :salary")
+
+    @Query("SELECT r.candidate FROM Resume r WHERE r.salaryMin <= :salary")
     List<Candidate> findAllByTags(@Param("salary") int upperBound, Pageable pageable);
 }
