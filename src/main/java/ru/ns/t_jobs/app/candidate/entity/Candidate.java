@@ -3,6 +3,7 @@ package ru.ns.t_jobs.app.candidate.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import ru.ns.t_jobs.app.track.entity.Track;
+import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 
 import java.util.List;
 
@@ -33,4 +34,12 @@ public class Candidate {
 
     @OneToMany(mappedBy = "candidate")
     private List<Track> tracks;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "candidate_vacancy",
+            joinColumns = @JoinColumn(name = "candidate_id"),
+            inverseJoinColumns = @JoinColumn(name = "vacancy_id")
+    )
+    private List<Vacancy> appliedVacancies;
 }

@@ -11,7 +11,8 @@ public class ResumeConvertor {
                 r.getCandidate().getId(),
                 r.getSalaryMin(),
                 r.getDescription(),
-                r.getTags()
+                r.getTags(),
+                r.getDate()
         );
     }
 

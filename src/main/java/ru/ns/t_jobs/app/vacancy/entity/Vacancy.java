@@ -2,6 +2,7 @@ package ru.ns.t_jobs.app.vacancy.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.tag.Tag;
 import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.staff.entity.Staff;
@@ -47,4 +48,7 @@ public class Vacancy {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vacancy")
     private List<Track> tracks;
+
+    @ManyToMany(mappedBy = "appliedVacancies")
+    private List<Candidate> appliedCandidates;
 }

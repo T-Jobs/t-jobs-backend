@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import ru.ns.t_jobs.app.tag.Tag;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -31,4 +32,7 @@ public class Resume {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags;
+
+    @Column(name = "date")
+    private LocalDate date;
 }

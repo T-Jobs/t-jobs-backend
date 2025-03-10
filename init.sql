@@ -219,15 +219,18 @@ CREATE TABLE resume (
     id              SERIAL,
     candidate_id    BIGINT UNSIGNED NOT NULL,
     salary_min      INT DEFAULT 0,
-    description     TEXT ,
+    description     TEXT,
+    date            DATE NOT NULL,
 
     PRIMARY KEY(id),
 
     FOREIGN KEY (candidate_id) REFERENCES candidate(id)
 );
 
-INSERT INTO resume (candidate_id, salary_min, description) VALUES
-    (1, 10, 'Какое-то описание.'), (2, 600000, 'Еще одно описание.'), (3, 59, 'Да, тут тоже описание.');
+INSERT INTO resume (candidate_id, salary_min, description, date) VALUES
+    (1, 10,     'Какое-то описание.',       "2015-03-12"),
+    (2, 600000, 'Еще одно описание.',       "2018-09-23"),
+    (3, 59,     'Да, тут тоже описание.',   "2024-12-24");
 
 CREATE TABLE resume_tag (
     resume_id   BIGINT UNSIGNED NOT NULL,
@@ -242,3 +245,14 @@ CREATE TABLE resume_tag (
 INSERT INTO resume_tag (resume_id, tag_id) VALUES
     (1, 2), (2, 3), (3, 1), (3, 2);
 
+CREATE TABLE candidate_vacancy (
+    candidate_id    BIGINT UNSIGNED NOT NULL,
+    vacancy_id      BIGINT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (candidate_id, vacancy_id),
+    FOREIGN KEY (candidate_id)  REFERENCES candidate(id),
+    FOREIGN KEY (vacancy_id)    REFERENCES vacancy(id)
+);
+
+INSERT INTO candidate_vacancy (candidate_id, vacancy_id) VALUES
+    (1, 1), (2, 2);
