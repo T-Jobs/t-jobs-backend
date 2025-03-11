@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 
@@ -20,7 +19,7 @@ import java.util.Collection;
 public class Credentials implements UserDetails {
     @Id
     @Column(name = "staff_id")
-    private long staffId;
+    private Long staffId;
 
     @Column(name = "login", nullable = false, unique = true, length = 50)
     private String login;

@@ -12,7 +12,8 @@ import java.util.List;
 @Getter
 public class Resume {
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id", referencedColumnName = "id",
@@ -20,7 +21,7 @@ public class Resume {
     private Candidate candidate;
 
     @Column(name = "salary_min")
-    private int salaryMin;
+    private Integer salaryMin;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;

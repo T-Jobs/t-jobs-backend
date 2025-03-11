@@ -9,7 +9,7 @@ import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
 import java.util.List;
 
 public record TrackInfoDto(
-        long id,
+        Long id,
         StaffInfoDto hr,
         CandidateDto candidate,
         VacancyDto vacancy,

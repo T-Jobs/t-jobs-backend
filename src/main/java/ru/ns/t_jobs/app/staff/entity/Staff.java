@@ -17,9 +17,8 @@ import java.util.Set;
 @Entity
 @Table(name = "staff")
 public class Staff {
-
     @Id
-    @Column(name = "id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 100)

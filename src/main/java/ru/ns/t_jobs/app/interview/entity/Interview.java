@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "interview")
 public class Interview {
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "interview_order", nullable = false)
     private int interviewOrder;

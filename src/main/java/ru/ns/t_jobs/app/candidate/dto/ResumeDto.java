@@ -10,7 +10,7 @@ import java.util.List;
 public record ResumeDto(
         long id,
         @JsonProperty("candidate_id") long candidateId,
-        @JsonProperty("salary_min") long salaryMin,
+        @JsonProperty("salary_min") Integer salaryMin,
         String description,
         List<Tag> tags,
         @JsonFormat(pattern = "yyyy-MM-dd") LocalDate data

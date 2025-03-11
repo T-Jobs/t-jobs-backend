@@ -8,8 +8,8 @@ import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 @Table(name = "interview_base")
 @Getter
 public class InterviewBase {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
