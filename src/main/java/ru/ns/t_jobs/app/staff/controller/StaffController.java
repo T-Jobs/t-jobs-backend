@@ -1,8 +1,6 @@
 package ru.ns.t_jobs.app.staff.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
@@ -31,4 +29,13 @@ public interface StaffController {
 
     @GetMapping("/search")
     List<StaffInfoDto> searchStaffByText(@RequestParam String text);
+
+    @GetMapping("/{id}")
+    StaffInfoDto getStaffById(@PathVariable long id);
+
+    @GetMapping
+    List<StaffInfoDto> getStaffByIds(@RequestParam("ids") List<Long> ids);
+
+    @PostMapping("/set-interviewer-mode")
+    void setInterviewerMode(@RequestParam("value") boolean interviewerMode);
 }

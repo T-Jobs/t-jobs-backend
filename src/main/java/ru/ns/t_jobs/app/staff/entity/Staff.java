@@ -2,6 +2,7 @@ package ru.ns.t_jobs.app.staff.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.track.entity.Track;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "staff")
 public class Staff {

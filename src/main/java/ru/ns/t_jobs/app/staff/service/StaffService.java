@@ -17,4 +17,7 @@ public interface StaffService {
     List<InterviewDto> getUserInterviews(boolean onlyActual);
     List<TrackInfoDto> getHrTracks(boolean onlyActual);
     List<StaffInfoDto> searchStaffByText(String text);
+    List<StaffInfoDto> getStaffByIds(List<Long> ids);
+    StaffInfoDto getStaffById(Long id);
+    void setInterviewerMode(boolean interviewerMode);
 }

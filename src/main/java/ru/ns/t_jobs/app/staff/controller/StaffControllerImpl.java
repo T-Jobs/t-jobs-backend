@@ -46,4 +46,19 @@ public class StaffControllerImpl implements StaffController {
     public List<StaffInfoDto> searchStaffByText(String text) {
         return staffService.searchStaffByText(text);
     }
+
+    @Override
+    public StaffInfoDto getStaffById(long id) {
+        return staffService.getStaffById(id);
+    }
+
+    @Override
+    public List<StaffInfoDto> getStaffByIds(List<Long> ids) {
+        return staffService.getStaffByIds(ids);
+    }
+
+    @Override
+    public void setInterviewerMode(boolean interviewerMode) {
+        staffService.setInterviewerMode(interviewerMode);
+    }
 }

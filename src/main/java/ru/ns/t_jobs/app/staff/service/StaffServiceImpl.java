@@ -18,6 +18,7 @@ import ru.ns.t_jobs.auth.user.Role;
 import ru.ns.t_jobs.auth.util.AuthUtils;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -82,5 +83,25 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<StaffInfoDto> searchStaffByText(String text) {
         return StaffConvertor.from(staffRepository.findByText(text));
+    }
+
+    @Override
+    public List<StaffInfoDto> getStaffByIds(List<Long> ids) {
+        return StaffConvertor.from(staffRepository.findAllById(ids));
+    }
+
+    @Override
+    public StaffInfoDto getStaffById(Long id) {
+        return StaffConvertor.from(
+                staffRepository.findById(id)
+                        .orElseThrow(() -> new NoSuchElementException("No staff with %d id".formatted(id)))
+        );
+    }
+
+    @Override
+    public void setInterviewerMode(boolean interviewerMode) {
+        Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
+        c.getStaff().setInterviewerMode(interviewerMode);
+        staffRepository.save(c.getStaff());
     }
 }
