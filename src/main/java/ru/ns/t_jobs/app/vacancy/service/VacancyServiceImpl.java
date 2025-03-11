@@ -4,11 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.ns.t_jobs.app.candidate.dto.CandidateConvertor;
-import ru.ns.t_jobs.app.candidate.dto.CandidateDto;
-import ru.ns.t_jobs.app.candidate.entity.ResumeRepository;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
+import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 
 import java.util.List;
@@ -20,17 +18,15 @@ public class VacancyServiceImpl implements VacancyService {
     private final VacancyRepository vacancyRepository;
 
     @Override
-    public List<VacancyDto> searchVacancies(int page, int pageSize, int salaryUpperBound, List<Long> tagIds) {
-        if (tagIds == null || tagIds.isEmpty()) return searchCandidates(page, pageSize, salaryUpperBound);
-
+    public List<VacancyDto> searchVacancies(String text, int page, int pageSize, int salaryLowerBound, List<Long> tagIds) {
         Pageable paging = PageRequest.of(page, pageSize);
-        return VacancyConvertor.from(
-                vacancyRepository.findAllByTags(tagIds, tagIds.size(), salaryUpperBound, paging)
-        );
-    }
+        List<Vacancy> vacancies;
+        if (tagIds == null || tagIds.isEmpty()) {
+            vacancies = vacancyRepository.findAllByTags(salaryLowerBound, paging);
+        } else {
+            vacancies = vacancyRepository.findAllByTags(tagIds, tagIds.size(), salaryLowerBound, paging);
+        }
 
-    List<VacancyDto> searchCandidates(int page, int pageSize, int salaryUpperBound) {
-        Pageable paging = PageRequest.of(page, pageSize);
-        return VacancyConvertor.from(vacancyRepository.findAllByTags(salaryUpperBound, paging));
+        return vacancies.stream().filter(v -> v.getName().toLowerCase().contains(text)).map(VacancyConvertor::from).toList();
     }
 }

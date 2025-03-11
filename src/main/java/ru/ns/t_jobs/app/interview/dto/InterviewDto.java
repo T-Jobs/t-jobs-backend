@@ -28,6 +28,8 @@ public record InterviewDto(
         InterviewStatus status,
 
         @JsonProperty("able_set_time")
-        boolean ableSetTime
+        boolean ableSetTime,
+
+        String link
 ) {
 }

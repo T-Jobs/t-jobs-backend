@@ -48,6 +48,9 @@ public class Interview {
     @JoinColumn(name = "track_id", referencedColumnName = "id",
             insertable = false, updatable = false, nullable = false)
     private Track track;
+
+    @Column(name = "link", columnDefinition = "TEXT")
+    private String link;
 }
 
 

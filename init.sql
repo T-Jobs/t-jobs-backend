@@ -12,18 +12,19 @@ INSERT INTO role (name) VALUES
     ('HR'), ('TL'), ('INTERVIEWER');
 
 CREATE TABLE staff (
-    id          SERIAL,
-    name        VARCHAR(100) NOT NULL,
-    surname     VARCHAR(100),
-    photo_url   TEXT,
+    id              SERIAL,
+    name            VARCHAR(100) NOT NULL,
+    surname         VARCHAR(100),
+    photo_url       TEXT,
+    interview_mode  BOOLEAN DEFAULT FALSE,
 
     PRIMARY KEY (id)
 );
 
-INSERT INTO staff (name, surname, photo_url) VALUES
-    ('Мария', 'Грек', 'https://tatmitropolia.ru/www/images/ikony_svyatych/maksim_grek_595.jpg'),      
-    ('Эрих', 'Ремарк', 'https://brsbs.ru/sites/default/files/news/images/erih-mariya-remark.jpg'),    
-    ('Байрон', 'Депампадур', 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Boucher_Pompadour_Munich_04.jpg/800px-Boucher_Pompadour_Munich_04.jpg');     
+INSERT INTO staff (name, surname, photo_url, interview_mode) VALUES
+    ('Мария', 'Грек', 'https://tatmitropolia.ru/www/images/ikony_svyatych/maksim_grek_595.jpg', FAlSE),
+    ('Эрих', 'Ремарк', 'https://brsbs.ru/sites/default/files/news/images/erih-mariya-remark.jpg', FALSE),
+    ('Байрон', 'Депампадур', 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Boucher_Pompadour_Munich_04.jpg/800px-Boucher_Pompadour_Munich_04.jpg', TRUE);
 
 CREATE TABLE staff_role (
     staff_id    BIGINT UNSIGNED NOT NULL,
@@ -124,6 +125,7 @@ CREATE TABLE interview (
     feedback            TEXT ,
     status              ENUM('FAILED', 'SUCCESS', 'WAITING_FEEDBACK', 'TIME_APPROVAL', 'NONE'),
     able_set_time       BOOLEAN,
+    link                TEXT,
 
     PRIMARY KEY (id),
 

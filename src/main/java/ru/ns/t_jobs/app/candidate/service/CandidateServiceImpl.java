@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.candidate.dto.CandidateConvertor;
 import ru.ns.t_jobs.app.candidate.dto.CandidateDto;
 import ru.ns.t_jobs.app.candidate.dto.ResumeDto;
+import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.candidate.entity.ResumeConvertor;
 import ru.ns.t_jobs.app.candidate.entity.ResumeRepository;
 
@@ -20,13 +21,23 @@ public class CandidateServiceImpl implements CandidateService {
     private final ResumeRepository resumeRepository;
 
     @Override
-    public List<CandidateDto> searchCandidates(int page, int pageSize, int salaryUpperBound, List<Long> tagIds) {
-        if (tagIds == null || tagIds.isEmpty()) return searchCandidates(page, pageSize, salaryUpperBound);
-
+    public List<CandidateDto> searchCandidates(
+            String text,
+            int page,
+            int pageSize,
+            int salaryUpperBound,
+            List<Long> tagIds
+    ) {
         Pageable paging = PageRequest.of(page, pageSize);
-        return CandidateConvertor.from(
-                resumeRepository.findAllByTags(tagIds, tagIds.size(), salaryUpperBound, paging)
-        );
+        List<Candidate> candidates;
+        if (tagIds == null || tagIds.isEmpty()) {
+            candidates = resumeRepository.findAllByTags(salaryUpperBound, paging);
+        } else {
+            candidates = resumeRepository.findAllByTags(tagIds, tagIds.size(), salaryUpperBound, paging);
+        }
+
+        return candidates.stream().filter(c -> (c.getName() + c.getSurname()).toLowerCase().contains(text))
+                .map(CandidateConvertor::from).toList();
     }
 
     @Override
@@ -40,10 +51,5 @@ public class CandidateServiceImpl implements CandidateService {
                 resumeRepository.findById(id)
                         .orElseThrow(() -> new NoSuchElementException("No resume with %d id".formatted(id)))
         );
-    }
-
-    List<CandidateDto> searchCandidates(int page, int pageSize, int salaryUpperBound) {
-        Pageable paging = PageRequest.of(page, pageSize);
-        return CandidateConvertor.from(resumeRepository.findAllByTags(salaryUpperBound, paging));
     }
 }

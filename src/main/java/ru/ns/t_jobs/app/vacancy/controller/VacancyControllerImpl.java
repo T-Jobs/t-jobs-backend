@@ -14,7 +14,7 @@ public class VacancyControllerImpl implements VacancyController {
     private final VacancyService vacancyService;
 
     @Override
-    public List<VacancyDto> searchVacancies(int page, int page_size, int salaryLowerBound, List<Long> tagIds) {
-        return vacancyService.searchVacancies(page, page_size, salaryLowerBound, tagIds);
+    public List<VacancyDto> searchVacancies(String text, int page, int page_size, int salaryLowerBound, List<Long> tagIds) {
+        return vacancyService.searchVacancies(text, page, page_size, salaryLowerBound, tagIds);
     }
 }

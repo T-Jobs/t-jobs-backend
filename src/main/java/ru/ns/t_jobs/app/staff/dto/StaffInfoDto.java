@@ -16,6 +16,7 @@ public record StaffInfoDto(
         List<InterviewType> interviewTypes,
         List<Long> vacancies,
         List<String> roles,
-        List<Long> interviews
+        List<Long> interviews,
+        @JsonProperty("interviewer_mode") boolean interviewerMode
 ) {
 }

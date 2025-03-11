@@ -6,7 +6,10 @@ import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
+import ru.ns.t_jobs.app.interview.entity.InterviewType;
+import ru.ns.t_jobs.app.interview.entity.InterviewTypeRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -15,6 +18,7 @@ import java.util.Optional;
 public class InterviewServiceImpl implements InterviewService {
 
     private final InterviewRepository interviewRepository;
+    private final InterviewTypeRepository interviewTypeRepository;
 
     @Override
     public InterviewDto getInterviewById(long id) {
@@ -24,6 +28,11 @@ public class InterviewServiceImpl implements InterviewService {
             throw new NoSuchElementException("No interview with %d id.".formatted(id));
 
         return InterviewConvertor.from(interviewOp.orElseThrow());
+    }
+
+    @Override
+    public List<InterviewType> searchInterviewTypes(String name) {
+        return interviewTypeRepository.findByNameIgnoreCaseContains(name);
     }
 
 }

@@ -18,7 +18,8 @@ public class StaffConvertor {
                 s.getInterviewTypes(),
                 s.getVacancies().stream().map(Vacancy::getId).toList(),
                 s.getRoles().stream().map(Role::getName).toList(),
-                s.getInterviews().stream().map(Interview::getId).toList()
+                s.getInterviews().stream().map(Interview::getId).toList(),
+                s.isInterviewerMode()
         );
     }
 }

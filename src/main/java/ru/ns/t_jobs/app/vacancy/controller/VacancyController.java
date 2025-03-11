@@ -11,6 +11,7 @@ import java.util.List;
 public interface VacancyController {
     @GetMapping("/search")
     List<VacancyDto> searchVacancies(
+            @RequestParam(name = "text", required = false, defaultValue = "") String text,
             @RequestParam("page") int page,
             @RequestParam("page_size") int page_size,
             @RequestParam(name = "salaryLowerBound", defaultValue = "0", required = false) int salaryLowerBound,

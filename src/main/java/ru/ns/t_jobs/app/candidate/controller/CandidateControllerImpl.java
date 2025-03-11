@@ -15,8 +15,14 @@ public class CandidateControllerImpl implements CandidateController {
     private final CandidateService candidateService;
 
     @Override
-    public List<CandidateDto> searchCandidates(int page, int page_size, int salaryUpperBound, List<Long> tagIds) {
-        return candidateService.searchCandidates(page, page_size, salaryUpperBound, tagIds);
+    public List<CandidateDto> searchCandidates(
+            String text,
+            int page,
+            int page_size,
+            int salaryUpperBound,
+            List<Long> tagIds
+    ) {
+        return candidateService.searchCandidates(text, page, page_size, salaryUpperBound, tagIds);
     }
 
     @Override

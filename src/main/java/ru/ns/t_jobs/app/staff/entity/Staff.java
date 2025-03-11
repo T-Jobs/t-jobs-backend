@@ -58,4 +58,7 @@ public class Staff {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    @Column(name = "interviewer_mode")
+    private boolean interviewerMode;
 }

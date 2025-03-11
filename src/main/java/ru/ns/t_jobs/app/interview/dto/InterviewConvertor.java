@@ -13,7 +13,8 @@ public class InterviewConvertor {
                 i.isDateApproved(),
                 i.getFeedback(),
                 i.getStatus(),
-                i.isAbleSetTime()
+                i.isAbleSetTime(),
+                i.getLink()
         );
     }
 }
