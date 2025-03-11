@@ -12,16 +12,16 @@ INSERT INTO role (name) VALUES
     ('HR'), ('TL'), ('INTERVIEWER');
 
 CREATE TABLE staff (
-    id              SERIAL,
-    name            VARCHAR(100) NOT NULL,
-    surname         VARCHAR(100),
-    photo_url       TEXT,
-    interview_mode  BOOLEAN DEFAULT FALSE,
+    id                  SERIAL,
+    name                VARCHAR(100) NOT NULL,
+    surname             VARCHAR(100),
+    photo_url           TEXT,
+    interviewer_mode    BOOLEAN DEFAULT FALSE,
 
     PRIMARY KEY (id)
 );
 
-INSERT INTO staff (name, surname, photo_url, interview_mode) VALUES
+INSERT INTO staff (name, surname, photo_url, interviewer_mode) VALUES
     ('Мария', 'Грек', 'https://tatmitropolia.ru/www/images/ikony_svyatych/maksim_grek_595.jpg', FAlSE),
     ('Эрих', 'Ремарк', 'https://brsbs.ru/sites/default/files/news/images/erih-mariya-remark.jpg', FALSE),
     ('Байрон', 'Депампадур', 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Boucher_Pompadour_Munich_04.jpg/800px-Boucher_Pompadour_Munich_04.jpg', TRUE);

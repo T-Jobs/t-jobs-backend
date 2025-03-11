@@ -6,6 +6,8 @@ import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import ru.ns.t_jobs.auth.user.Role;
 
+import java.util.List;
+
 public class StaffConvertor {
 
     public static StaffInfoDto from(Staff s) {
@@ -21,5 +23,9 @@ public class StaffConvertor {
                 s.getInterviews().stream().map(Interview::getId).toList(),
                 s.isInterviewerMode()
         );
+    }
+
+    public static List<StaffInfoDto> from(List<Staff> s) {
+        return s.stream().map(StaffConvertor::from).toList();
     }
 }

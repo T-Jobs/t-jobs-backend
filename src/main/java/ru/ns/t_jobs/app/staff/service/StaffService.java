@@ -16,4 +16,5 @@ public interface StaffService {
     List<VacancyDto> getUserVacancies();
     List<InterviewDto> getUserInterviews(boolean onlyActual);
     List<TrackInfoDto> getHrTracks(boolean onlyActual);
+    List<StaffInfoDto> searchStaffByText(String text);
 }

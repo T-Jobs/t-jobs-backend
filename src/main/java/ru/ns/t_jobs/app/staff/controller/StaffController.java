@@ -28,4 +28,7 @@ public interface StaffController {
 
     @GetMapping("/tracks")
     List<TrackInfoDto> getUserTracks(@RequestParam boolean onlyActual);
+
+    @GetMapping("/search")
+    List<StaffInfoDto> searchStaffByText(@RequestParam String text);
 }

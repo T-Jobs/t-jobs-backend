@@ -78,4 +78,9 @@ public class StaffServiceImpl implements StaffService {
         return staffRepository.getReferenceById(principal.getStaffId()).getTracks()
                 .stream().filter(t -> !onlyActual || t.isFinished()).map(TrackConvertor::from).toList();
     }
+
+    @Override
+    public List<StaffInfoDto> searchStaffByText(String text) {
+        return StaffConvertor.from(staffRepository.findByText(text));
+    }
 }

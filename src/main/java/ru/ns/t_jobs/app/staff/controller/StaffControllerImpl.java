@@ -41,4 +41,9 @@ public class StaffControllerImpl implements StaffController {
     public List<TrackInfoDto> getUserTracks(boolean onlyActual) {
         return staffService.getHrTracks(onlyActual);
     }
+
+    @Override
+    public List<StaffInfoDto> searchStaffByText(String text) {
+        return staffService.searchStaffByText(text);
+    }
 }
