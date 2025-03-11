@@ -1,7 +1,6 @@
 package ru.ns.t_jobs.app.vacancy.dto;
 
 import ru.ns.t_jobs.app.candidate.dto.CandidateConvertor;
-import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;

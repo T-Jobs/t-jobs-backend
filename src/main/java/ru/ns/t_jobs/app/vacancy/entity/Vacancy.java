@@ -1,20 +1,25 @@
 package ru.ns.t_jobs.app.vacancy.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import ru.ns.t_jobs.app.candidate.entity.Candidate;
-import ru.ns.t_jobs.app.tag.Tag;
 import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.staff.entity.Staff;
+import ru.ns.t_jobs.app.tag.Tag;
 import ru.ns.t_jobs.app.track.entity.Track;
 
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "vacancy")
 public class Vacancy {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 100)
@@ -24,10 +29,10 @@ public class Vacancy {
     private String description;
 
     @Column(name = "salary_min")
-    private int salaryMin;
+    private Integer salaryMin;
 
     @Column(name = "salary_max")
-    private int salaryMax;
+    private Integer salaryMax;
 
     @Column(name = "town", length = 50)
     private String town;

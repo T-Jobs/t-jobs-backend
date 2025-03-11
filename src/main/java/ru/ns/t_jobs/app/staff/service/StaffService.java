@@ -1,7 +1,5 @@
 package ru.ns.t_jobs.app.staff.service;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
@@ -10,7 +8,6 @@ import ru.ns.t_jobs.auth.user.Role;
 
 import java.util.List;
 
-@Repository
 public interface StaffService {
     StaffInfoDto getUserInfo();
     List<Role> getUserRoles();
