@@ -32,7 +32,7 @@ public class Staff {
     private String photoUrl;
 
     @OneToMany(mappedBy = "hrId", fetch = FetchType.LAZY)
-    private List<Track> tracks;
+    private Set<Track> tracks;
 
     @ManyToMany
     @JoinTable(
@@ -40,7 +40,7 @@ public class Staff {
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "interview_type_id")
     )
-    private List<InterviewType> interviewTypes;
+    private Set<InterviewType> interviewTypes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "interviewer")
     private List<Interview> interviews;
@@ -51,7 +51,7 @@ public class Staff {
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "vacancy_id")
     )
-    private List<Vacancy> vacancies;
+    private Set<Vacancy> vacancies;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

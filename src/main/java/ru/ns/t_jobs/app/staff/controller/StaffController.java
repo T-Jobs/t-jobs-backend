@@ -38,4 +38,10 @@ public interface StaffController {
 
     @PostMapping("/set-interviewer-mode")
     void setInterviewerMode(@RequestParam("value") boolean interviewerMode);
+
+    @PostMapping("/competencies")
+    void addInterviewTypeToInterviewer(@RequestParam("interview_type_id") long interviewTypeId);
+
+    @DeleteMapping("/competencies")
+    void removeInterviewTypeToInterviewer(@RequestParam("interview_type_id") long interviewTypeId);
 }

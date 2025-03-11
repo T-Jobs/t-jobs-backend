@@ -61,4 +61,14 @@ public class StaffControllerImpl implements StaffController {
     public void setInterviewerMode(boolean interviewerMode) {
         staffService.setInterviewerMode(interviewerMode);
     }
+
+    @Override
+    public void addInterviewTypeToInterviewer(long interviewTypeId) {
+        staffService.addInterviewTypeToInterviewer(interviewTypeId);
+    }
+
+    @Override
+    public void removeInterviewTypeToInterviewer(long interviewTypeId) {
+        staffService.removeInterviewTypeFromInterviewer(interviewTypeId);
+    }
 }

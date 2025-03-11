@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.Interview;
+import ru.ns.t_jobs.app.interview.entity.InterviewTypeRepository;
 import ru.ns.t_jobs.app.staff.dto.StaffConvertor;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.staff.entity.Staff;
@@ -31,6 +32,7 @@ import static ru.ns.t_jobs.app.interview.entity.InterviewStatus.SUCCESS;
 public class StaffServiceImpl implements StaffService {
 
     private final StaffRepository staffRepository;
+    private final InterviewTypeRepository interviewTypeRepository;
 
     @Override
     public StaffInfoDto getUserInfo() {
@@ -103,5 +105,33 @@ public class StaffServiceImpl implements StaffService {
         Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
         c.getStaff().setInterviewerMode(interviewerMode);
         staffRepository.save(c.getStaff());
+    }
+
+    @Override
+    public void addInterviewTypeToInterviewer(long interviewTypeId) {
+        var interviewType = interviewTypeRepository.findById(interviewTypeId);
+
+        Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
+        Staff s = staffRepository.getReferenceById(c.getStaffId());
+        s.getInterviewTypes().add(
+                interviewType.orElseThrow(
+                        () -> new NoSuchElementException("No interview type with %d id.".formatted(interviewTypeId))
+                )
+        );
+        staffRepository.save(s);
+    }
+
+    @Override
+    public void removeInterviewTypeFromInterviewer(long interviewTypeId) {
+        var interviewType = interviewTypeRepository.findById(interviewTypeId);
+
+        Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
+        Staff s = staffRepository.getReferenceById(c.getStaffId());
+        s.getInterviewTypes().remove(
+                interviewType.orElseThrow(
+                        () -> new NoSuchElementException("No interview type with %d id.".formatted(interviewTypeId))
+                )
+        );
+        staffRepository.save(s);
     }
 }

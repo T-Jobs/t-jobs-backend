@@ -1,6 +1,7 @@
 package ru.ns.t_jobs.app.staff.service;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
@@ -20,4 +21,6 @@ public interface StaffService {
     List<StaffInfoDto> getStaffByIds(List<Long> ids);
     StaffInfoDto getStaffById(Long id);
     void setInterviewerMode(boolean interviewerMode);
+    void addInterviewTypeToInterviewer(long interviewTypeId);
+    void removeInterviewTypeFromInterviewer(long interviewTypeId);
 }

@@ -7,6 +7,7 @@ import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 
+import java.util.Collection;
 import java.util.List;
 
 public class VacancyConvertor {
@@ -26,7 +27,7 @@ public class VacancyConvertor {
         );
     }
 
-    public static List<VacancyDto> from(List<Vacancy> v) {
+    public static List<VacancyDto> from(Collection<Vacancy> v) {
         return v.stream().map(VacancyConvertor::from).toList();
     }
 }
