@@ -30,10 +30,10 @@ public class Staff {
     @Column(name = "photo_url", columnDefinition = "TEXT")
     private String photoUrl;
 
-    @OneToMany(mappedBy = "hrId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "hr", fetch = FetchType.EAGER)
     private Set<Track> tracks;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "interview_type_staff",
             joinColumns = @JoinColumn(name = "staff_id"),
@@ -41,10 +41,10 @@ public class Staff {
     )
     private Set<InterviewType> interviewTypes;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "interviewer")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "interviewer")
     private List<Interview> interviews;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "staff_vacancy",
             joinColumns = @JoinColumn(name = "staff_id"),

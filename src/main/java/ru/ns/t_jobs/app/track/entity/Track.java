@@ -1,7 +1,7 @@
 package ru.ns.t_jobs.app.track.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
@@ -11,7 +11,11 @@ import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "track")
 public class Track {
     @Id
@@ -19,25 +23,22 @@ public class Track {
     private Long id;
 
     @Column(name = "finished")
-    private boolean finished;
+    private boolean finished = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "last_status")
-    private InterviewStatus lastStatus;
-
-    @Column(name = "hr_id")
-    private Long hrId;
+    private InterviewStatus lastStatus = InterviewStatus.NONE;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hr_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "hr_id", referencedColumnName = "id")
     private Staff hr;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "candidate_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "candidate_id", referencedColumnName = "id")
     private Candidate candidate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vacancy_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "vacancy_id", referencedColumnName = "id")
     private Vacancy vacancy;
 
     @OneToMany(mappedBy = "track")

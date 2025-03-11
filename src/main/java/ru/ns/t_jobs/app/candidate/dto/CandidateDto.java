@@ -15,6 +15,6 @@ public record CandidateDto(
         String town,
         List<Long> resumes,
         List<Long> tracks,
-        @JsonProperty("applied_vacancies") List<VacancyDto> appliedVacancies
+        @JsonProperty("applied_vacancies") List<Long> appliedVacancies
 ) {
 }

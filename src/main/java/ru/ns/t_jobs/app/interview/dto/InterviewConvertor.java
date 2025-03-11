@@ -8,7 +8,7 @@ public class InterviewConvertor {
                 i.getId(),
                 i.getInterviewer().getId(),
                 i.getInterviewType(),
-                i.getTrackId(),
+                i.getTrack().getId(),
                 i.getDatePicked(),
                 i.isDateApproved(),
                 i.getFeedback(),

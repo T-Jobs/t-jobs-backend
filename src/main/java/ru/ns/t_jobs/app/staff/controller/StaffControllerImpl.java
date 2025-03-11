@@ -71,4 +71,9 @@ public class StaffControllerImpl implements StaffController {
     public void removeInterviewTypeToInterviewer(long interviewTypeId) {
         staffService.removeInterviewTypeFromInterviewer(interviewTypeId);
     }
+
+    @Override
+    public void followVacancy(long id) {
+        staffService.followVacancy(id);
+    }
 }

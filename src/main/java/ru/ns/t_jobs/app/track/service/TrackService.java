@@ -6,4 +6,5 @@ import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
 @Repository
 public interface TrackService {
     TrackInfoDto getTrackById(long id);
+    TrackInfoDto approveApplication(long candidateId, long vacancyId);
 }

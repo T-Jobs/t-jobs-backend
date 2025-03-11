@@ -19,7 +19,7 @@ public class CandidateConvertor {
                 candidate.getTown(),
                 candidate.getResumes().stream().map(Resume::getId).toList(),
                 candidate.getTracks().stream().map(Track::getId).toList(),
-                candidate.getAppliedVacancies().stream().map(VacancyConvertor::from).toList()
+                candidate.getAppliedVacancies().stream().map(Vacancy::getId).toList()
         );
     }
 

@@ -39,7 +39,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         authorize -> authorize
                                 .requestMatchers("/auth/login").permitAll()
                                 .requestMatchers("/user/tracks",
-                                        "/vacancy/create", "/vacancy/edit/**").hasRole("HR")
+                                        "/vacancy/create", "/vacancy/edit/**",
+                                        "/track/approve-application").hasRole("HR")
                                 .requestMatchers("/user/set-interviewer-mode",
                                         "/user/competencies").hasRole("INTERVIEWER")
                                 .anyRequest().authenticated()

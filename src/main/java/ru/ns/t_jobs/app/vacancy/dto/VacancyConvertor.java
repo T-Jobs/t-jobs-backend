@@ -1,6 +1,7 @@
 package ru.ns.t_jobs.app.vacancy.dto;
 
 import ru.ns.t_jobs.app.candidate.dto.CandidateConvertor;
+import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;
@@ -22,7 +23,7 @@ public class VacancyConvertor {
                 v.getTags(),
                 v.getStaff().stream().map(Staff::getId).toList(),
                 v.getTracks().stream().map(Track::getId).toList(),
-                v.getAppliedCandidates().stream().map(CandidateConvertor::from).toList()
+                v.getAppliedCandidates().stream().map(Candidate::getId).toList()
         );
     }
 

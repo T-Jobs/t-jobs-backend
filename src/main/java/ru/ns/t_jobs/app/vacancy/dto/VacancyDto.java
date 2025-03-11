@@ -17,6 +17,6 @@ public record VacancyDto(
         List<Tag> tags,
         List<Long> staff,
         List<Long> tracks,
-        @JsonProperty("applied_candidates") List<CandidateDto> appliedCandidates
+        @JsonProperty("applied_candidates") List<Long> appliedCandidates
 ) {
 }
