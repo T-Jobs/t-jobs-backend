@@ -247,7 +247,7 @@ CREATE TABLE resume_tag (
 INSERT INTO resume_tag (resume_id, tag_id) VALUES
     (1, 2), (2, 3), (3, 1), (3, 2);
 
-CREATE TABLE candidate_vacancy (
+CREATE TABLE candidate_applications (
     candidate_id    BIGINT UNSIGNED NOT NULL,
     vacancy_id      BIGINT UNSIGNED NOT NULL,
 
@@ -256,5 +256,5 @@ CREATE TABLE candidate_vacancy (
     FOREIGN KEY (vacancy_id)    REFERENCES vacancy(id)
 );
 
-INSERT INTO candidate_vacancy (candidate_id, vacancy_id) VALUES
+INSERT INTO candidate_applications (candidate_id, vacancy_id) VALUES
     (1, 1), (2, 2);

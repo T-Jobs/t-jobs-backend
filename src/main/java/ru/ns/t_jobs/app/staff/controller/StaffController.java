@@ -44,4 +44,7 @@ public interface StaffController {
 
     @DeleteMapping("/competencies")
     void removeInterviewTypeToInterviewer(@RequestParam("interview_type_id") long interviewTypeId);
+
+    @PostMapping("/follow-vacancy/{id}")
+    void followVacancy(@PathVariable("id") long id);
 }

@@ -14,6 +14,7 @@ import ru.ns.t_jobs.app.track.dto.TrackConvertor;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
+import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 import ru.ns.t_jobs.auth.user.Credentials;
 import ru.ns.t_jobs.auth.user.Role;
 import ru.ns.t_jobs.auth.util.AuthUtils;
@@ -33,6 +34,7 @@ public class StaffServiceImpl implements StaffService {
 
     private final StaffRepository staffRepository;
     private final InterviewTypeRepository interviewTypeRepository;
+    private final VacancyRepository vacancyRepository;
 
     @Override
     public StaffInfoDto getUserInfo() {
@@ -133,5 +135,15 @@ public class StaffServiceImpl implements StaffService {
                 )
         );
         staffRepository.save(s);
+    }
+
+    @Override
+    public void followVacancy(long id) {
+        Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
+        c.getStaff().getVacancies().add(
+                vacancyRepository.findById(id)
+                        .orElseThrow(() -> new NoSuchElementException("No vacancy type with %d id.".formatted(id)))
+        );
+        staffRepository.save(c.getStaff());
     }
 }
