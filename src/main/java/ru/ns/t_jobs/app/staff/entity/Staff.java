@@ -7,7 +7,7 @@ import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
-import ru.ns.t_jobs.auth.user.Role;
+import ru.ns.t_jobs.auth.credentials.Role;
 
 import java.util.List;
 import java.util.Set;

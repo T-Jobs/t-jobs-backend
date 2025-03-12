@@ -16,12 +16,12 @@ import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.track.entity.TrackRepository;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
-import ru.ns.t_jobs.auth.user.Credentials;
-import ru.ns.t_jobs.auth.util.AuthUtils;
+import ru.ns.t_jobs.auth.util.ContextUtils;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class TrackServiceImpl implements TrackService {
         Optional<Track> trackOp = trackRepository.findById(id);
 
         if (trackOp.isEmpty())
-            throw new NoSuchElementException("No tracks with %d id".formatted(id));
+            throw noSuchTrackException(id);
 
         Track track = trackOp.orElseThrow();
         return TrackConvertor.from(track);
@@ -46,20 +46,16 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     public TrackInfoDto approveApplication(long candidateId, long vacancyId) {
-        Candidate c = candidateRepository.findById(candidateId).orElseThrow(
-                () -> new NoSuchElementException("No such candidate with %d id.".formatted(candidateId))
-        );
+        Candidate c = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> noSuchCandidateException(candidateId));
 
         if (c.getAppliedVacancies().stream().noneMatch(v -> v.getId() == vacancyId)) {
-            throw new NoSuchElementException("No such application from candidate with %d id to vacancy with %d id"
-                    .formatted(candidateId, vacancyId));
+            throw noSuchApplicationException(candidateId, vacancyId);
         }
 
-        Vacancy v = vacancyRepository.findById(candidateId).orElseThrow(
-                () -> new NoSuchElementException("No such vacancy with %d id.".formatted(candidateId))
-        );
-        Staff s = ((Credentials) AuthUtils.getCurrentUserDetails()).getStaff();
-        s = staffRepository.getReferenceById(s.getId());
+        Vacancy v = vacancyRepository.findById(candidateId)
+                .orElseThrow(() -> noSuchVacancyException(vacancyId));
+        Staff s = staffRepository.getReferenceById(ContextUtils.getCurrentUserStaffId());
         c.getAppliedVacancies().remove(v);
         candidateRepository.save(c);
 

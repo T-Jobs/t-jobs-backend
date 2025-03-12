@@ -14,7 +14,8 @@ import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +59,7 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     public void editVacancy(NewVacancyDto vacancyDto, long id) {
         Vacancy vacancy = vacancyRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("No vacancy with %d id.".formatted(id)));
+                .orElseThrow(() -> noSuchVacancyException(id));
 
         vacancy.setName(vacancyDto.name());
         vacancy.setDescription(vacancyDto.description());

@@ -4,8 +4,9 @@ import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
-import ru.ns.t_jobs.auth.user.Role;
+import ru.ns.t_jobs.auth.credentials.Role;
 
+import java.util.Collection;
 import java.util.List;
 
 public class StaffConvertor {
@@ -25,7 +26,7 @@ public class StaffConvertor {
         );
     }
 
-    public static List<StaffInfoDto> from(List<Staff> s) {
+    public static List<StaffInfoDto> from(Collection<Staff> s) {
         return s.stream().map(StaffConvertor::from).toList();
     }
 }

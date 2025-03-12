@@ -10,8 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.ns.t_jobs.auth.user.Credentials;
-import ru.ns.t_jobs.auth.user.CredentialsRepository;
+import ru.ns.t_jobs.auth.credentials.Credentials;
+import ru.ns.t_jobs.auth.credentials.CredentialsRepository;
 
 import java.io.IOException;
 import java.util.Optional;

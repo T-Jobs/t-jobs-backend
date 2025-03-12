@@ -1,8 +1,6 @@
 package ru.ns.t_jobs.app.candidate.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
-import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 
 import java.util.List;
 

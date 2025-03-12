@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.ns.t_jobs.app.interview.dto.InterviewBaseDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 
@@ -19,4 +20,10 @@ public interface InterviewController {
             @RequestParam(value = "name", required = false, defaultValue = "")
             String name
     );
+
+    @GetMapping("/base/{id}")
+    InterviewBaseDto getInterviewBase(@PathVariable("id") long id);
+
+    @GetMapping("/base")
+    List<InterviewBaseDto> getInterviewBases(@PathVariable("ids") List<Long> ids);
 }

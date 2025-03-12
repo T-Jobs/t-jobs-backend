@@ -12,7 +12,8 @@ import ru.ns.t_jobs.app.candidate.entity.ResumeConvertor;
 import ru.ns.t_jobs.app.candidate.entity.ResumeRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchResumeException;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +49,7 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public ResumeDto getResume(Long id) {
         return ResumeConvertor.from(
-                resumeRepository.findById(id)
-                        .orElseThrow(() -> new NoSuchElementException("No resume with %d id".formatted(id)))
+                resumeRepository.findById(id).orElseThrow(() -> noSuchResumeException(id))
         );
     }
 }

@@ -2,6 +2,7 @@ package ru.ns.t_jobs.app.interview.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
+import ru.ns.t_jobs.app.interview.dto.InterviewBaseDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.interview.service.InterviewService;
@@ -22,5 +23,15 @@ public class InterviewControllerImpl implements InterviewController {
     @Override
     public List<InterviewType> searchInterviewTypes(String name) {
         return interviewService.searchInterviewTypes(name);
+    }
+
+    @Override
+    public InterviewBaseDto getInterviewBase(long id) {
+        return interviewService.getInterviewBase(id);
+    }
+
+    @Override
+    public List<InterviewBaseDto> getInterviewBases(List<Long> ids) {
+        return interviewService.getInterviewBases(ids);
     }
 }

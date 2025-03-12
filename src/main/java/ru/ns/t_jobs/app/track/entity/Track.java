@@ -23,11 +23,11 @@ public class Track {
     private Long id;
 
     @Column(name = "finished")
-    private boolean finished = false;
+    private boolean finished;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "last_status")
-    private InterviewStatus lastStatus = InterviewStatus.NONE;
+    private InterviewStatus lastStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hr_id", referencedColumnName = "id")

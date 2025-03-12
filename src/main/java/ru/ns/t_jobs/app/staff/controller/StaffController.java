@@ -5,8 +5,9 @@ import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
-import ru.ns.t_jobs.auth.user.Role;
+import ru.ns.t_jobs.auth.credentials.Role;
 
+import java.util.Collection;
 import java.util.List;
 
 @RequestMapping("/user")
@@ -16,7 +17,7 @@ public interface StaffController {
     StaffInfoDto getUserInfo();
 
     @GetMapping("/roles")
-    List<Role> getUserRoles();
+    Collection<Role> getUserRoles();
 
     @GetMapping("/interviews")
     List<InterviewDto> getUserInterviews(@RequestParam boolean onlyActual);

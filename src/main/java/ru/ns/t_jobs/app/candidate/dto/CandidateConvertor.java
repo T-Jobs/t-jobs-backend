@@ -3,7 +3,6 @@ package ru.ns.t_jobs.app.candidate.dto;
 import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.candidate.entity.Resume;
 import ru.ns.t_jobs.app.track.entity.Track;
-import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 
 import java.util.List;

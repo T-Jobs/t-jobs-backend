@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.ns.t_jobs.auth.user.Credentials;
+import ru.ns.t_jobs.auth.credentials.Credentials;
 import ru.ns.t_jobs.handler.dto.ExceptionResponse;
 
 import java.util.NoSuchElementException;

@@ -36,14 +36,14 @@ public class Interview {
     private LocalDateTime datePicked;
 
     @Column(name = "date_approved", columnDefinition = "boolean default false")
-    private boolean dateApproved = false;
+    private boolean dateApproved;
 
     @Column(name = "feedback", columnDefinition = "text")
     private String feedback;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private InterviewStatus status = InterviewStatus.NONE;
+    private InterviewStatus status;
 
     @Column(name = "able_set_time")
     private boolean ableSetTime;

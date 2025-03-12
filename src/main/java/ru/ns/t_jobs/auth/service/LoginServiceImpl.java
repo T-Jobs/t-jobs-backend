@@ -5,10 +5,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import ru.ns.t_jobs.auth.credentials.Credentials;
+import ru.ns.t_jobs.auth.credentials.CredentialsRepository;
 import ru.ns.t_jobs.auth.dto.AuthenticationRequest;
 import ru.ns.t_jobs.auth.token.JwtTokenUtils;
-import ru.ns.t_jobs.auth.user.Credentials;
-import ru.ns.t_jobs.auth.user.CredentialsRepository;
 
 import java.util.Optional;
 

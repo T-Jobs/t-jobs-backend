@@ -15,55 +15,53 @@ import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
-import ru.ns.t_jobs.auth.user.Credentials;
-import ru.ns.t_jobs.auth.user.Role;
-import ru.ns.t_jobs.auth.util.AuthUtils;
+import ru.ns.t_jobs.auth.credentials.Role;
+import ru.ns.t_jobs.auth.util.ContextUtils;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
 import static ru.ns.t_jobs.app.interview.entity.InterviewStatus.FAILED;
 import static ru.ns.t_jobs.app.interview.entity.InterviewStatus.SUCCESS;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
 
 @Service
 @RequiredArgsConstructor
 public class StaffServiceImpl implements StaffService {
 
-    private final StaffRepository staffRepository;
-    private final InterviewTypeRepository interviewTypeRepository;
-    private final VacancyRepository vacancyRepository;
+    private final StaffRepository staffs;
+    private final InterviewTypeRepository interviews;
+    private final VacancyRepository vacancies;
 
     @Override
     public StaffInfoDto getUserInfo() {
-        Credentials principal = (Credentials) AuthUtils.getCurrentUserDetails();
-        Staff s = staffRepository.getReferenceById(principal.getStaffId());
+        Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
         return StaffConvertor.from(s);
     }
 
     @Override
-    public List<Role> getUserRoles() {
-        Credentials principal = (Credentials) AuthUtils.getCurrentUserDetails();
-        return (List<Role>) principal.getAuthorities();
+    public Collection<Role> getUserRoles() {
+        Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
+        return s.getRoles();
     }
 
     @Override
     public List<VacancyDto> getUserVacancies() {
-        Credentials principal = (Credentials) AuthUtils.getCurrentUserDetails();
         return VacancyConvertor.from(
-                staffRepository.getReferenceById(principal.getStaffId()).getVacancies()
+                staffs.getReferenceById(ContextUtils.getCurrentUserStaffId())
+                        .getVacancies()
         );
     }
 
     @Override
     public List<InterviewDto> getUserInterviews(boolean onlyActual) {
-        Credentials principal = (Credentials) AuthUtils.getCurrentUserDetails();
-        long staffId = principal.getStaffId();
+        long staffId = ContextUtils.getCurrentUserStaffId();
         var filterInterviewTypes = Set.of(SUCCESS, FAILED);
 
-        Stream<Interview> result = staffRepository.getReferenceById(staffId).getInterviews().stream();
+        Stream<Interview> result = staffs.getReferenceById(staffId).getInterviews().stream();
         if (onlyActual) {
             result = result.filter(i -> !filterInterviewTypes.contains(i.getStatus()));
         }
@@ -79,71 +77,63 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public List<TrackInfoDto> getHrTracks(boolean onlyActual) {
-        Credentials principal = (Credentials) AuthUtils.getCurrentUserDetails();
-        return staffRepository.getReferenceById(principal.getStaffId()).getTracks()
+        return staffs.getReferenceById(ContextUtils.getCurrentUserStaffId()).getTracks()
                 .stream().filter(t -> !onlyActual || t.isFinished()).map(TrackConvertor::from).toList();
     }
 
     @Override
     public List<StaffInfoDto> searchStaffByText(String text) {
-        return StaffConvertor.from(staffRepository.findByText(text));
+        return StaffConvertor.from(staffs.findByText(text));
     }
 
     @Override
     public List<StaffInfoDto> getStaffByIds(List<Long> ids) {
-        return StaffConvertor.from(staffRepository.findAllById(ids));
+        return StaffConvertor.from(staffs.findAllById(ids));
     }
 
     @Override
     public StaffInfoDto getStaffById(Long id) {
         return StaffConvertor.from(
-                staffRepository.findById(id)
-                        .orElseThrow(() -> new NoSuchElementException("No staff with %d id".formatted(id)))
+                staffs.findById(id).orElseThrow(() -> noSuchStaffException(id))
         );
     }
 
     @Override
     public void setInterviewerMode(boolean interviewerMode) {
-        Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
-        c.getStaff().setInterviewerMode(interviewerMode);
-        staffRepository.save(c.getStaff());
+        Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
+        s.setInterviewerMode(interviewerMode);
+        staffs.save(s);
     }
 
     @Override
     public void addInterviewTypeToInterviewer(long interviewTypeId) {
-        var interviewType = interviewTypeRepository.findById(interviewTypeId);
+        var interviewType = interviews.findById(interviewTypeId);
 
-        Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
-        Staff s = staffRepository.getReferenceById(c.getStaffId());
+        Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
         s.getInterviewTypes().add(
-                interviewType.orElseThrow(
-                        () -> new NoSuchElementException("No interview type with %d id.".formatted(interviewTypeId))
-                )
+                interviewType.orElseThrow(() -> noSuchInterviewTypeException(interviewTypeId))
         );
-        staffRepository.save(s);
+        staffs.save(s);
     }
 
     @Override
     public void removeInterviewTypeFromInterviewer(long interviewTypeId) {
-        var interviewType = interviewTypeRepository.findById(interviewTypeId);
+        var interviewType = interviews.findById(interviewTypeId);
 
-        Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
-        Staff s = staffRepository.getReferenceById(c.getStaffId());
+        Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
         s.getInterviewTypes().remove(
-                interviewType.orElseThrow(
-                        () -> new NoSuchElementException("No interview type with %d id.".formatted(interviewTypeId))
-                )
+                interviewType.orElseThrow(() -> noSuchInterviewTypeException(interviewTypeId))
         );
-        staffRepository.save(s);
+        staffs.save(s);
     }
 
     @Override
     public void followVacancy(long id) {
-        Credentials c = (Credentials) AuthUtils.getCurrentUserDetails();
-        c.getStaff().getVacancies().add(
-                vacancyRepository.findById(id)
-                        .orElseThrow(() -> new NoSuchElementException("No vacancy type with %d id.".formatted(id)))
+        Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
+        s.getVacancies().add(
+                vacancies.findById(id)
+                        .orElseThrow(() -> noSuchVacancyException(id))
         );
-        staffRepository.save(c.getStaff());
+        staffs.save(s);
     }
 }

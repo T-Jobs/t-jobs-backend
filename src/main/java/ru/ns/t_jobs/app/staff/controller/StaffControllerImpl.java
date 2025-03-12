@@ -7,8 +7,9 @@ import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.staff.service.StaffService;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
-import ru.ns.t_jobs.auth.user.Role;
+import ru.ns.t_jobs.auth.credentials.Role;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class StaffControllerImpl implements StaffController {
     }
 
     @Override
-    public List<Role> getUserRoles() {
+    public Collection<Role> getUserRoles() {
         return staffService.getUserRoles();
     }
 

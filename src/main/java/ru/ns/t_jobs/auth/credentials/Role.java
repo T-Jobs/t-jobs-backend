@@ -1,4 +1,4 @@
-package ru.ns.t_jobs.auth.user;
+package ru.ns.t_jobs.auth.credentials;
 
 import jakarta.persistence.*;
 import lombok.Getter;
