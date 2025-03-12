@@ -7,5 +7,6 @@
         <module name="AvoidStarImport"/>
         <module name="EmptyBlock"/>
         <module name="ConstantName"/>
+        <module name="UnusedImports"/>
     </module>
 </module>

@@ -2,11 +2,13 @@ package ru.ns.t_jobs.app.interview.dto;
 
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewBase;
+import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
+import ru.ns.t_jobs.app.track.entity.Track;
 
 import java.util.List;
 
 public class InterviewConvertor {
-    public static InterviewDto from(Interview i) {
+    public static InterviewDto interviewDto(Interview i) {
         return new InterviewDto(
                 i.getId(),
                 i.getInterviewer().getId(),
@@ -21,7 +23,7 @@ public class InterviewConvertor {
         );
     }
 
-    public static InterviewBaseDto from(InterviewBase i) {
+    public static InterviewBaseDto interviewBaseDto(InterviewBase i) {
         return new InterviewBaseDto(
                 i.getId(),
                 i.getInterviewType(),
@@ -30,7 +32,22 @@ public class InterviewConvertor {
         );
     }
 
-    public static List<InterviewBaseDto> from(List<InterviewBase> is) {
-        return is.stream().map(InterviewConvertor::from).toList();
+    public static List<InterviewBaseDto> interviewBaseDtos(List<InterviewBase> is) {
+        return is.stream().map(InterviewConvertor::interviewBaseDto).toList();
+    }
+
+    public static Interview interview(InterviewBase base, Track track) {
+        return Interview.builder()
+                .interviewOrder(base.getInterviewOrder())
+                .interviewType(base.getInterviewType())
+                .ableSetTime(base.getInterviewOrder() == 1)
+                .track(track)
+                .status(InterviewStatus.NONE)
+                .dateApproved(false)
+                .build();
+    }
+
+    public static List<Interview> interviews(List<InterviewBase> bases, Track track) {
+        return bases.stream().map(b -> interview(b, track)).toList();
     }
 }

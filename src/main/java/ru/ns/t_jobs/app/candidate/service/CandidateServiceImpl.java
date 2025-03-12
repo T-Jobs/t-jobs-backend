@@ -8,7 +8,7 @@ import ru.ns.t_jobs.app.candidate.dto.CandidateConvertor;
 import ru.ns.t_jobs.app.candidate.dto.CandidateDto;
 import ru.ns.t_jobs.app.candidate.dto.ResumeDto;
 import ru.ns.t_jobs.app.candidate.entity.Candidate;
-import ru.ns.t_jobs.app.candidate.entity.ResumeConvertor;
+import ru.ns.t_jobs.app.candidate.dto.ResumeConvertor;
 import ru.ns.t_jobs.app.candidate.entity.ResumeRepository;
 
 import java.util.List;
@@ -38,17 +38,17 @@ public class CandidateServiceImpl implements CandidateService {
         }
 
         return candidates.stream().filter(c -> (c.getName() + c.getSurname()).toLowerCase().contains(text))
-                .map(CandidateConvertor::from).toList();
+                .map(CandidateConvertor::candidateDto).toList();
     }
 
     @Override
     public List<ResumeDto> getResumes(List<Long> ids) {
-        return ResumeConvertor.from(resumeRepository.findAllById(ids));
+        return ResumeConvertor.resumeDtos(resumeRepository.findAllById(ids));
     }
 
     @Override
     public ResumeDto getResume(Long id) {
-        return ResumeConvertor.from(
+        return ResumeConvertor.resumeDto(
                 resumeRepository.findById(id).orElseThrow(() -> noSuchResumeException(id))
         );
     }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class StaffConvertor {
 
-    public static StaffInfoDto from(Staff s) {
+    public static StaffInfoDto staffInfoDto(Staff s) {
         return new StaffInfoDto(
                 s.getId(),
                 s.getName(),
@@ -26,7 +26,7 @@ public class StaffConvertor {
         );
     }
 
-    public static List<StaffInfoDto> from(Collection<Staff> s) {
-        return s.stream().map(StaffConvertor::from).toList();
+    public static List<StaffInfoDto> staffInfoDtos(Collection<Staff> s) {
+        return s.stream().map(StaffConvertor::staffInfoDto).toList();
     }
 }

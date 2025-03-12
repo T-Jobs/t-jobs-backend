@@ -1,4 +1,4 @@
-package ru.ns.t_jobs.app.tag;
+package ru.ns.t_jobs.app.tag.entity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

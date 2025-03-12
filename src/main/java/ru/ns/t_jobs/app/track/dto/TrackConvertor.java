@@ -10,12 +10,12 @@ import java.util.Comparator;
 
 public class TrackConvertor {
 
-    public static TrackInfoDto from(Track track) {
+    public static TrackInfoDto trackInfoDto(Track track) {
         return new TrackInfoDto(
                 track.getId(),
-                StaffConvertor.from(track.getHr()),
-                CandidateConvertor.from(track.getCandidate()),
-                VacancyConvertor.from(track.getVacancy()),
+                StaffConvertor.staffInfoDto(track.getHr()),
+                CandidateConvertor.candidateDto(track.getCandidate()),
+                VacancyConvertor.vacancyDto(track.getVacancy()),
                 track.isFinished(),
                 track.getInterviews().stream()
                         .sorted(Comparator.comparingInt(Interview::getInterviewOrder))

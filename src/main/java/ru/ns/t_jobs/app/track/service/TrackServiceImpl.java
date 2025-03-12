@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.candidate.entity.Candidate;
 import ru.ns.t_jobs.app.candidate.entity.CandidateRepository;
+import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.entity.Interview;
-import ru.ns.t_jobs.app.interview.entity.InterviewBaseConvertor;
 import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.staff.entity.Staff;
@@ -21,7 +21,10 @@ import ru.ns.t_jobs.auth.util.ContextUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchApplicationException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchCandidateException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchTrackException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public class TrackServiceImpl implements TrackService {
             throw noSuchTrackException(id);
 
         Track track = trackOp.orElseThrow();
-        return TrackConvertor.from(track);
+        return TrackConvertor.trackInfoDto(track);
     }
 
     @Override
@@ -69,10 +72,10 @@ public class TrackServiceImpl implements TrackService {
                 .build();
 
         var res = trackRepository.save(newTrack);
-        List<Interview> interviews = InterviewBaseConvertor.from(v.getInterviewBases(), res);
+        List<Interview> interviews = InterviewConvertor.interviews(v.getInterviewBases(), res);
         interviews = interviewRepository.saveAll(interviews);
 
         res.setInterviews(interviews);
-        return TrackConvertor.from(res);
+        return TrackConvertor.trackInfoDto(res);
     }
 }

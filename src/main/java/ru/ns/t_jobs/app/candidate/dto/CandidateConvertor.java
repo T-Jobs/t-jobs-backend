@@ -8,7 +8,7 @@ import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import java.util.List;
 
 public class CandidateConvertor {
-    public static CandidateDto from(Candidate candidate) {
+    public static CandidateDto candidateDto(Candidate candidate) {
         return new CandidateDto(
                 candidate.getId(),
                 candidate.getName(),
@@ -22,7 +22,7 @@ public class CandidateConvertor {
         );
     }
 
-    public static List<CandidateDto> from(List<Candidate> c) {
-        return c.stream().map(CandidateConvertor::from).toList();
+    public static List<CandidateDto> candidateDtos(List<Candidate> c) {
+        return c.stream().map(CandidateConvertor::candidateDto).toList();
     }
 }

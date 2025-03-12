@@ -3,7 +3,6 @@ package ru.ns.t_jobs.app.track.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
-import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.track.service.TrackService;
 
 @RestController

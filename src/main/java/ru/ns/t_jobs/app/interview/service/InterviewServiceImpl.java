@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.interview.dto.InterviewBaseDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
-import ru.ns.t_jobs.app.interview.entity.*;
+import ru.ns.t_jobs.app.interview.entity.Interview;
+import ru.ns.t_jobs.app.interview.entity.InterviewBaseRepository;
+import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
+import ru.ns.t_jobs.app.interview.entity.InterviewType;
+import ru.ns.t_jobs.app.interview.entity.InterviewTypeRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +32,7 @@ public class InterviewServiceImpl implements InterviewService {
         if (interviewOp.isEmpty())
             throw noSuchInterviewException(id);
 
-        return InterviewConvertor.from(interviewOp.orElseThrow());
+        return InterviewConvertor.interviewDto(interviewOp.orElseThrow());
     }
 
     @Override
@@ -38,7 +42,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     public InterviewBaseDto getInterviewBase(long id) {
-        return InterviewConvertor.from(
+        return InterviewConvertor.interviewBaseDto(
                 interviewBaseRepository.findById(id)
                         .orElseThrow(() -> noSuchBaseInterviewException(id))
         );
@@ -46,7 +50,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     public List<InterviewBaseDto> getInterviewBases(List<Long> ids) {
-        return InterviewConvertor.from(
+        return InterviewConvertor.interviewBaseDtos(
                 interviewBaseRepository.findAllById(ids)
         );
     }

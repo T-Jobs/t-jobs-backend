@@ -1,6 +1,11 @@
 package ru.ns.t_jobs.app.staff.controller;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.staff.dto.StaffInfoDto;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;

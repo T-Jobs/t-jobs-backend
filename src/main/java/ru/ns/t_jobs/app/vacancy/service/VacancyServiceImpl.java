@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.interview.entity.InterviewBaseRepository;
 import ru.ns.t_jobs.app.staff.entity.StaffRepository;
-import ru.ns.t_jobs.app.tag.TagRepository;
+import ru.ns.t_jobs.app.tag.entity.TagRepository;
 import ru.ns.t_jobs.app.vacancy.dto.NewVacancyDto;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
@@ -36,7 +36,7 @@ public class VacancyServiceImpl implements VacancyService {
             vacancies = vacancyRepository.findAllByTags(tagIds, tagIds.size(), salaryLowerBound, paging);
         }
 
-        return vacancies.stream().filter(v -> v.getName().toLowerCase().contains(text)).map(VacancyConvertor::from).toList();
+        return vacancies.stream().filter(v -> v.getName().toLowerCase().contains(text)).map(VacancyConvertor::vacancyDto).toList();
     }
 
     @Override

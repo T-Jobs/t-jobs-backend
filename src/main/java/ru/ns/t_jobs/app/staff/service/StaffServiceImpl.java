@@ -26,7 +26,9 @@ import java.util.stream.Stream;
 
 import static ru.ns.t_jobs.app.interview.entity.InterviewStatus.FAILED;
 import static ru.ns.t_jobs.app.interview.entity.InterviewStatus.SUCCESS;
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchInterviewTypeException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchStaffException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +41,7 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public StaffInfoDto getUserInfo() {
         Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
-        return StaffConvertor.from(s);
+        return StaffConvertor.staffInfoDto(s);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public List<VacancyDto> getUserVacancies() {
-        return VacancyConvertor.from(
+        return VacancyConvertor.vacancyDtos(
                 staffs.getReferenceById(ContextUtils.getCurrentUserStaffId())
                         .getVacancies()
         );
@@ -72,28 +74,28 @@ public class StaffServiceImpl implements StaffService {
             if (o2.getDatePicked() == null) return -1;
             return o1.getDatePicked().isBefore(o2.getDatePicked()) ? -1 : 1;
         });
-        return result.map(InterviewConvertor::from).toList();
+        return result.map(InterviewConvertor::interviewDto).toList();
     }
 
     @Override
     public List<TrackInfoDto> getHrTracks(boolean onlyActual) {
         return staffs.getReferenceById(ContextUtils.getCurrentUserStaffId()).getTracks()
-                .stream().filter(t -> !onlyActual || t.isFinished()).map(TrackConvertor::from).toList();
+                .stream().filter(t -> !onlyActual || t.isFinished()).map(TrackConvertor::trackInfoDto).toList();
     }
 
     @Override
     public List<StaffInfoDto> searchStaffByText(String text) {
-        return StaffConvertor.from(staffs.findByText(text));
+        return StaffConvertor.staffInfoDtos(staffs.findByText(text));
     }
 
     @Override
     public List<StaffInfoDto> getStaffByIds(List<Long> ids) {
-        return StaffConvertor.from(staffs.findAllById(ids));
+        return StaffConvertor.staffInfoDtos(staffs.findAllById(ids));
     }
 
     @Override
     public StaffInfoDto getStaffById(Long id) {
-        return StaffConvertor.from(
+        return StaffConvertor.staffInfoDto(
                 staffs.findById(id).orElseThrow(() -> noSuchStaffException(id))
         );
     }
