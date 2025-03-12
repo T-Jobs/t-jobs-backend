@@ -11,9 +11,20 @@ import java.util.List;
 
 @Repository
 public interface ResumeRepository extends PagingAndSortingRepository<Resume, Long>, JpaRepository<Resume, Long> {
-    @Query("SELECT distinct r.candidate FROM Resume r JOIN r.tags t WHERE t.id IN :tagIds AND r.salaryMin <= :salary GROUP BY r.id HAVING COUNT(t.id) >= :tagCount")
-    List<Candidate> findAllByTags(@Param("tagIds") List<Long> tagIds, @Param("tagCount") long tagCount, @Param("salary") int upperBound, Pageable pageable);
+    @Query("SELECT c FROM Candidate c JOIN c.resumes r JOIN r.tags t " +
+            "WHERE t.id IN :tagIds AND r.salaryMin <= :salary " +
+            "AND CONCAT(lower(c.name), ' ', lower(c.surname)) LIKE %:text% " +
+            "GROUP BY c.id HAVING COUNT(t.id) >= :tagCount")
+    List<Candidate> findAllByTags(@Param("text") String text,
+                                  @Param("tagIds") List<Long> tagIds,
+                                  @Param("tagCount") long tagCount,
+                                  @Param("salary") int salary,
+                                  Pageable pageable);
 
-    @Query("SELECT r.candidate FROM Resume r WHERE r.salaryMin <= :salary")
-    List<Candidate> findAllByTags(@Param("salary") int upperBound, Pageable pageable);
+    @Query("SELECT c FROM Candidate c JOIN c.resumes r " +
+            "WHERE r.salaryMin <= :salary " +
+            "AND CONCAT(lower(c.name), ' ', lower(c.surname)) LIKE %:text% ")
+    List<Candidate> findAllByTags(@Param("text") String text,
+                                  @Param("salary") int salary,
+                                  Pageable pageable);
 }

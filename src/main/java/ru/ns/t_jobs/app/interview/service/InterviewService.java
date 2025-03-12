@@ -7,7 +7,8 @@ import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import java.util.List;
 
 public interface InterviewService {
-    InterviewDto getInterviewById(long id);
+    InterviewDto getInterview(long id);
+    List<InterviewDto> getInterviews(List<Long> ids);
     List<InterviewType> searchInterviewTypes(String name);
     InterviewBaseDto getInterviewBase(long id);
     List<InterviewBaseDto> getInterviewBases(List<Long> ids);

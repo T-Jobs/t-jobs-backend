@@ -16,8 +16,13 @@ public class InterviewControllerImpl implements InterviewController {
     private final InterviewService interviewService;
 
     @Override
-    public InterviewDto getInterviewById(long id) {
-        return interviewService.getInterviewById(id);
+    public InterviewDto getInterview(long id) {
+        return interviewService.getInterview(id);
+    }
+
+    @Override
+    public List<InterviewDto> getInterviews(List<Long> ids) {
+        return interviewService.getInterviews(ids);
     }
 
     @Override

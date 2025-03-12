@@ -24,6 +24,10 @@ public class InterviewConvertor {
         );
     }
 
+    public static List<InterviewDto> interviewDtos(List<Interview> i) {
+        return i.stream().map(InterviewConvertor::interviewDto).toList();
+    }
+
     public static InterviewBaseDto interviewBaseDto(InterviewBase i) {
         return new InterviewBaseDto(
                 i.getId(),

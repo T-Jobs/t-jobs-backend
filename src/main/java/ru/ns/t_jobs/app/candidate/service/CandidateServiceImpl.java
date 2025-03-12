@@ -31,14 +31,13 @@ public class CandidateServiceImpl implements CandidateService {
     ) {
         Pageable paging = PageRequest.of(page, pageSize);
         List<Candidate> candidates;
-        if (tagIds == null || tagIds.isEmpty()) {
-            candidates = resumeRepository.findAllByTags(salaryUpperBound, paging);
+        if (tagIds != null) {
+            candidates = resumeRepository.findAllByTags(text.toLowerCase(), tagIds, tagIds.size(), salaryUpperBound, paging);
         } else {
-            candidates = resumeRepository.findAllByTags(tagIds, tagIds.size(), salaryUpperBound, paging);
+            candidates = resumeRepository.findAllByTags(text, salaryUpperBound, paging);
         }
 
-        return candidates.stream().filter(c -> (c.getName() + c.getSurname()).toLowerCase().contains(text))
-                .map(CandidateConvertor::candidateDto).toList();
+        return CandidateConvertor.candidateDtos(candidates);
     }
 
     @Override

@@ -13,7 +13,10 @@ import java.util.List;
 @RequestMapping("/interview")
 public interface InterviewController {
     @GetMapping("/{id}")
-    InterviewDto getInterviewById(@PathVariable("id") long id);
+    InterviewDto getInterview(@PathVariable("id") long id);
+
+    @GetMapping
+    List<InterviewDto> getInterviews(@RequestParam("ids") List<Long> ids);
 
     @GetMapping("/type/search")
     List<InterviewType> searchInterviewTypes(
@@ -25,5 +28,5 @@ public interface InterviewController {
     InterviewBaseDto getInterviewBase(@PathVariable("id") long id);
 
     @GetMapping("/base")
-    List<InterviewBaseDto> getInterviewBases(@PathVariable("ids") List<Long> ids);
+    List<InterviewBaseDto> getInterviewBases(@RequestParam("ids") List<Long> ids);
 }

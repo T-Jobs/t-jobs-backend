@@ -13,8 +13,8 @@ public interface StaffService {
     StaffInfoDto getUserInfo();
     Collection<String> getUserRoles();
     List<VacancyDto> getUserVacancies();
-    List<InterviewDto> getUserInterviews(boolean onlyActual);
-    List<TrackInfoDto> getHrTracks(boolean onlyActual);
+    List<InterviewDto> getUserInterviews(boolean onlyRelevant);
+    List<TrackInfoDto> getHrTracks(boolean onlyRelevant);
     List<StaffInfoDto> searchStaffByText(String text);
     List<StaffInfoDto> getStaffByIds(List<Long> ids);
     StaffInfoDto getStaffById(Long id);

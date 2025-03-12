@@ -5,17 +5,13 @@ import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.interview.dto.InterviewBaseDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
-import ru.ns.t_jobs.app.interview.entity.Interview;
-import ru.ns.t_jobs.app.interview.entity.InterviewBaseRepository;
-import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
-import ru.ns.t_jobs.app.interview.entity.InterviewType;
-import ru.ns.t_jobs.app.interview.entity.InterviewTypeRepository;
+import ru.ns.t_jobs.app.interview.entity.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchBaseInterviewException;
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchInterviewException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +22,24 @@ public class InterviewServiceImpl implements InterviewService {
     private final InterviewBaseRepository interviewBaseRepository;
 
     @Override
-    public InterviewDto getInterviewById(long id) {
+    public InterviewDto getInterview(long id) {
         Optional<Interview> interviewOp = interviewRepository.findById(id);
 
         if (interviewOp.isEmpty())
             throw noSuchInterviewException(id);
 
         return InterviewConvertor.interviewDto(interviewOp.orElseThrow());
+    }
+
+    @Override
+    public List<InterviewDto> getInterviews(List<Long> ids) {
+        var res = interviewRepository.findAllById(ids);
+        if (res.size() != ids.size()) {
+            var notFound = new ArrayList<>(ids);
+            notFound.removeAll(res.stream().map(Interview::getId).toList());
+            throw noSuchInterviewsException(notFound);
+        }
+        return InterviewConvertor.interviewDtos(res);
     }
 
     @Override
@@ -50,6 +57,12 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     public List<InterviewBaseDto> getInterviewBases(List<Long> ids) {
+        var res = interviewBaseRepository.findAllById(ids);
+        if (res.size() != ids.size()) {
+            var notFound = new ArrayList<>(ids);
+            notFound.removeAll(res.stream().map(InterviewBase::getId).toList());
+            throw noSuchBaseInterviewsException(notFound);
+        }
         return InterviewConvertor.interviewBaseDtos(
                 interviewBaseRepository.findAllById(ids)
         );

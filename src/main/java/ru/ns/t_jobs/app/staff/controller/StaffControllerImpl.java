@@ -29,8 +29,8 @@ public class StaffControllerImpl implements StaffController {
     }
 
     @Override
-    public List<InterviewDto> getUserInterviews(boolean onlyActual) {
-        return staffService.getUserInterviews(onlyActual);
+    public List<InterviewDto> getUserInterviews(boolean onlyRelevant) {
+        return staffService.getUserInterviews(onlyRelevant);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class StaffControllerImpl implements StaffController {
     }
 
     @Override
-    public List<TrackInfoDto> getUserTracks(boolean onlyActual) {
-        return staffService.getHrTracks(onlyActual);
+    public List<TrackInfoDto> getUserTracks(boolean onlyRelevant) {
+        return staffService.getHrTracks(onlyRelevant);
     }
 
     @Override

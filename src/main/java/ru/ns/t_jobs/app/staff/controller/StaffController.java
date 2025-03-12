@@ -25,13 +25,13 @@ public interface StaffController {
     Collection<String> getUserRoles();
 
     @GetMapping("/interviews")
-    List<InterviewDto> getUserInterviews(@RequestParam boolean onlyActual);
+    List<InterviewDto> getUserInterviews(@RequestParam boolean onlyRelevant);
 
     @GetMapping("/vacancies")
     List<VacancyDto> getUserVacancies();
 
     @GetMapping("/tracks")
-    List<TrackInfoDto> getUserTracks(@RequestParam boolean onlyActual);
+    List<TrackInfoDto> getUserTracks(@RequestParam boolean onlyRelevant);
 
     @GetMapping("/search")
     List<StaffInfoDto> searchStaffByText(@RequestParam String text);

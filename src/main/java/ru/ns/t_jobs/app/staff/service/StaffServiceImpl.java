@@ -1,6 +1,7 @@
 package ru.ns.t_jobs.app.staff.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
@@ -17,18 +18,14 @@ import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 import ru.ns.t_jobs.auth.credentials.Role;
 import ru.ns.t_jobs.auth.util.ContextUtils;
+import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static ru.ns.t_jobs.app.interview.entity.InterviewStatus.FAILED;
 import static ru.ns.t_jobs.app.interview.entity.InterviewStatus.SUCCESS;
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchInterviewTypeException;
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchStaffException;
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
 
 @Service
 @RequiredArgsConstructor
@@ -59,12 +56,12 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public List<InterviewDto> getUserInterviews(boolean onlyActual) {
+    public List<InterviewDto> getUserInterviews(boolean onlyRelevant) {
         long staffId = ContextUtils.getCurrentUserStaffId();
         var filterInterviewTypes = Set.of(SUCCESS, FAILED);
 
         Stream<Interview> result = staffs.getReferenceById(staffId).getInterviews().stream();
-        if (onlyActual) {
+        if (onlyRelevant) {
             result = result.filter(i -> !filterInterviewTypes.contains(i.getStatus()));
         }
 
@@ -78,9 +75,9 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public List<TrackInfoDto> getHrTracks(boolean onlyActual) {
+    public List<TrackInfoDto> getHrTracks(boolean onlyRelevant) {
         return staffs.getReferenceById(ContextUtils.getCurrentUserStaffId()).getTracks()
-                .stream().filter(t -> !onlyActual || t.isFinished()).map(TrackConvertor::trackInfoDto).toList();
+                .stream().filter(t -> !onlyRelevant || t.isFinished()).map(TrackConvertor::trackInfoDto).toList();
     }
 
     @Override
@@ -90,7 +87,13 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public List<StaffInfoDto> getStaffByIds(List<Long> ids) {
-        return StaffConvertor.staffInfoDtos(staffs.findAllById(ids));
+        var res = staffs.findAllById(ids);
+        if (res.size() != ids.size()) {
+            var notFound = new ArrayList<>(ids);
+            notFound.removeAll(res.stream().map(Staff::getId).toList());
+            throw noSuchCandidatesException(notFound);
+        }
+        return StaffConvertor.staffInfoDtos(res);
     }
 
     @Override
