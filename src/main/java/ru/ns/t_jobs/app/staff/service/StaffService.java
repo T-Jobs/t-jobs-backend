@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface StaffService {
     StaffInfoDto getUserInfo();
-    Collection<Role> getUserRoles();
+    Collection<String> getUserRoles();
     List<VacancyDto> getUserVacancies();
     List<InterviewDto> getUserInterviews(boolean onlyActual);
     List<TrackInfoDto> getHrTracks(boolean onlyActual);

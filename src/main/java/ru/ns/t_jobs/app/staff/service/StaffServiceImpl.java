@@ -45,9 +45,9 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Collection<Role> getUserRoles() {
+    public Collection<String> getUserRoles() {
         Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
-        return s.getRoles();
+        return s.getRoles().stream().map(Role::getName).toList();
     }
 
     @Override

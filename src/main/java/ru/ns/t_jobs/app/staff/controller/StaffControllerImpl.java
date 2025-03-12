@@ -24,7 +24,7 @@ public class StaffControllerImpl implements StaffController {
     }
 
     @Override
-    public Collection<Role> getUserRoles() {
+    public Collection<String> getUserRoles() {
         return staffService.getUserRoles();
     }
 

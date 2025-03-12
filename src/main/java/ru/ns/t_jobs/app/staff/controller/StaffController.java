@@ -22,7 +22,7 @@ public interface StaffController {
     StaffInfoDto getUserInfo();
 
     @GetMapping("/roles")
-    Collection<Role> getUserRoles();
+    Collection<String> getUserRoles();
 
     @GetMapping("/interviews")
     List<InterviewDto> getUserInterviews(@RequestParam boolean onlyActual);
