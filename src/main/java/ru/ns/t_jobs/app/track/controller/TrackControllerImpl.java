@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
 import ru.ns.t_jobs.app.track.service.TrackService;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class TrackControllerImpl implements TrackController {
@@ -13,7 +15,12 @@ public class TrackControllerImpl implements TrackController {
 
     @Override
     public TrackInfoDto getTrack(long id) {
-        return trackService.getTrackById(id);
+        return trackService.getTrack(id);
+    }
+
+    @Override
+    public List<TrackInfoDto> getTracks(List<Long> ids) {
+        return trackService.getTracks(ids);
     }
 
     @Override

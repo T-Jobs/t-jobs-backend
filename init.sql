@@ -153,7 +153,7 @@ CREATE TABLE interview_type_staff (
 INSERT INTO interview_type_staff (interview_type_id, staff_id) VALUES
     (1, 3), (2, 3), (3, 1);
 
-CREATE TABLE interview_base (
+CREATE TABLE base_interview (
     id SERIAL,
     interview_type_id   BIGINT UNSIGNED NOT NULL,
     vacancy_id          BIGINT UNSIGNED NOT NULL,
@@ -165,7 +165,7 @@ CREATE TABLE interview_base (
     FOREIGN KEY (vacancy_id)        REFERENCES vacancy(id)
 );
 
-INSERT INTO interview_base (interview_type_id, vacancy_id, interview_order) VALUES
+INSERT INTO base_interview (interview_type_id, vacancy_id, interview_order) VALUES
     (3, 1, 1), (3, 2, 1), (1, 1, 2), (2, 1, 3);
 
 CREATE TABLE staff_vacancy (

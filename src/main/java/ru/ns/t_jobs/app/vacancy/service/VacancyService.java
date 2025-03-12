@@ -9,4 +9,6 @@ public interface VacancyService {
     List<VacancyDto> searchVacancies(String text, int page, int pageSize, int salaryLowerBound, List<Long> tagIds);
     VacancyDto createVacancy(EditOrCreateVacancyDto vacancyDto);
     VacancyDto editVacancy(EditOrCreateVacancyDto vacancyDto, long id);
+    VacancyDto getVacancy(long id);
+    List<VacancyDto> getVacancies(List<Long> ids);
 }

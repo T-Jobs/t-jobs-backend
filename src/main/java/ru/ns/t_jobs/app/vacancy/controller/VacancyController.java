@@ -18,12 +18,18 @@ public interface VacancyController {
             @RequestParam(name = "text", required = false, defaultValue = "") String text,
             @RequestParam("page") int page,
             @RequestParam("page_size") int page_size,
-            @RequestParam(name = "salaryLowerBound", defaultValue = "0", required = false) int salaryLowerBound,
-            @RequestParam(name = "tagIds", required = false) List<Long> tagIds);
+            @RequestParam(name = "salary_lower_bound", defaultValue = "0", required = false) int salaryLowerBound,
+            @RequestParam(name = "tag_ids", required = false) List<Long> tagIds);
 
     @PostMapping("/create")
     VacancyDto createVacancy(@RequestBody EditOrCreateVacancyDto vacancyDto);
 
     @PostMapping("/edit/{id}")
     VacancyDto editVacancy(@RequestBody EditOrCreateVacancyDto vacancyDto, @PathVariable("id") long id);
+
+    @GetMapping("/{id}")
+    VacancyDto getVacancy(@PathVariable("id") long id);
+
+    @GetMapping
+    List<VacancyDto> getVacancies(@RequestParam("ids") List<Long> ids);
 }

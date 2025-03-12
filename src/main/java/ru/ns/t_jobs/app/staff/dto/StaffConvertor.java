@@ -19,7 +19,7 @@ public class StaffConvertor {
                 s.getPhotoUrl(),
                 s.getTracks().stream().map(Track::getId).toList(),
                 s.getInterviewTypes(),
-                s.getVacancies().stream().map(Vacancy::getId).toList(),
+                s.getVacancies() == null ? List.of() : s.getVacancies().stream().map(Vacancy::getId).toList(),
                 s.getRoles().stream().map(Role::getName).toList(),
                 s.getInterviews().stream().map(Interview::getId).toList(),
                 s.isInterviewerMode()

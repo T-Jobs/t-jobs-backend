@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.ns.t_jobs.app.candidate.entity.Candidate;
-import ru.ns.t_jobs.app.interview.entity.InterviewBase;
+import ru.ns.t_jobs.app.interview.entity.BaseInterview;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.tag.entity.Tag;
 import ru.ns.t_jobs.app.track.entity.Track;
@@ -52,7 +52,7 @@ public class Vacancy {
     private String town;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vacancy")
-    private List<InterviewBase> interviewBases;
+    private List<BaseInterview> baseInterviews;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

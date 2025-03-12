@@ -19,7 +19,13 @@ public interface CandidateController {
             @RequestParam(name = "salary_upper_bound", defaultValue = "99999999", required = false) int salaryUpperBound,
             @RequestParam(name = "tag_ids", required = false) List<Long> tagIds);
 
-    @GetMapping("/resumes")
+    @GetMapping("/{id}")
+    CandidateDto getCandidate(@PathVariable("id") long id);
+
+    @GetMapping
+    List<CandidateDto> getCandidates(@RequestParam("ids") List<Long> ids);
+
+    @GetMapping("/resume")
     List<ResumeDto> getResumes(@RequestParam(name = "ids") List<Long> resumeIds);
 
     @GetMapping("/resume/{id}")

@@ -6,20 +6,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.candidate.dto.CandidateConvertor;
 import ru.ns.t_jobs.app.candidate.dto.CandidateDto;
+import ru.ns.t_jobs.app.candidate.dto.ResumeConvertor;
 import ru.ns.t_jobs.app.candidate.dto.ResumeDto;
 import ru.ns.t_jobs.app.candidate.entity.Candidate;
-import ru.ns.t_jobs.app.candidate.dto.ResumeConvertor;
+import ru.ns.t_jobs.app.candidate.entity.CandidateRepository;
+import ru.ns.t_jobs.app.candidate.entity.Resume;
 import ru.ns.t_jobs.app.candidate.entity.ResumeRepository;
+import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
 import java.util.List;
 
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchResumeException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
 
 @Service
 @RequiredArgsConstructor
 public class CandidateServiceImpl implements CandidateService {
 
     private final ResumeRepository resumeRepository;
+    private final CandidateRepository candidateRepository;
 
     @Override
     public List<CandidateDto> searchCandidates(
@@ -41,8 +45,30 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
+    public CandidateDto getCandidate(long id) {
+        return CandidateConvertor.candidateDto(
+                candidateRepository.findById(id).orElseThrow(() -> noSuchCandidateException(id))
+        );
+    }
+
+    @Override
+    public List<CandidateDto> getCandidates(List<Long> ids) {
+        var res = candidateRepository.findAllById(ids);
+        NotFoundExceptionFactory.containsAllOrThrow(
+                res.stream().map(Candidate::getId).toList(), ids,
+                NotFoundExceptionFactory::noSuchCandidatesException
+        );
+        return CandidateConvertor.candidateDtos(res);
+    }
+
+    @Override
     public List<ResumeDto> getResumes(List<Long> ids) {
-        return ResumeConvertor.resumeDtos(resumeRepository.findAllById(ids));
+        var res = resumeRepository.findAllById(ids);
+        NotFoundExceptionFactory.containsAllOrThrow(
+                res.stream().map(Resume::getId).toList(), ids,
+                NotFoundExceptionFactory::noSuchResumesException
+        );
+        return ResumeConvertor.resumeDtos(res);
     }
 
     @Override

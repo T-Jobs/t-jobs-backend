@@ -16,9 +16,9 @@ public class CandidateConvertor {
                 candidate.getPhotoUrl(),
                 candidate.getTgId(),
                 candidate.getTown(),
-                candidate.getResumes().stream().map(Resume::getId).toList(),
-                candidate.getTracks().stream().map(Track::getId).toList(),
-                candidate.getAppliedVacancies().stream().map(Vacancy::getId).toList()
+                candidate.getResumes() == null ? List.of() : candidate.getResumes().stream().map(Resume::getId).toList(),
+                candidate.getTracks() == null ? List.of() : candidate.getTracks().stream().map(Track::getId).toList(),
+                candidate.getAppliedVacancies() == null ? List.of() : candidate.getAppliedVacancies().stream().map(Vacancy::getId).toList()
         );
     }
 

@@ -28,4 +28,14 @@ public class VacancyControllerImpl implements VacancyController {
     public VacancyDto editVacancy(EditOrCreateVacancyDto vacancyDto, long id) {
         return vacancyService.editVacancy(vacancyDto, id);
     }
+
+    @Override
+    public VacancyDto getVacancy(long id) {
+        return vacancyService.getVacancy(id);
+    }
+
+    @Override
+    public List<VacancyDto> getVacancies(List<Long> ids) {
+        return vacancyService.getVacancies(ids);
+    }
 }

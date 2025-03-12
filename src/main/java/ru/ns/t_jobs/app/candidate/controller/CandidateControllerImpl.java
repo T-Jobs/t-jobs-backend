@@ -26,6 +26,16 @@ public class CandidateControllerImpl implements CandidateController {
     }
 
     @Override
+    public CandidateDto getCandidate(long id) {
+        return candidateService.getCandidate(id);
+    }
+
+    @Override
+    public List<CandidateDto> getCandidates(List<Long> ids) {
+        return candidateService.getCandidates(ids);
+    }
+
+    @Override
     public List<ResumeDto> getResumes(List<Long> resumeIds) {
         return candidateService.getResumes(resumeIds);
     }

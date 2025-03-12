@@ -18,9 +18,9 @@ import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "interview_base")
+@Table(name = "base_interview")
 @Getter
-public class InterviewBase {
+public class BaseInterview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -22,4 +22,5 @@ public interface StaffService {
     void addInterviewTypeToInterviewer(long interviewTypeId);
     void removeInterviewTypeFromInterviewer(long interviewTypeId);
     void followVacancy(long id);
+    void unfollowVacancy(long id);
 }

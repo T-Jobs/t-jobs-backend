@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface CandidateService {
     List<CandidateDto> searchCandidates(String text, int page, int pageSize, int salaryUpperBound, List<Long> tagIds);
+    CandidateDto getCandidate(long id);
+    List<CandidateDto> getCandidates(List<Long> ids);
     List<ResumeDto> getResumes(List<Long> ids);
     ResumeDto getResume(Long id);
 }

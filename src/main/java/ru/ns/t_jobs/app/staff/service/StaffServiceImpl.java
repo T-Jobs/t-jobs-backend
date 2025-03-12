@@ -13,6 +13,7 @@ import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.staff.entity.StaffRepository;
 import ru.ns.t_jobs.app.track.dto.TrackConvertor;
 import ru.ns.t_jobs.app.track.dto.TrackInfoDto;
+import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
@@ -88,11 +89,10 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<StaffInfoDto> getStaffByIds(List<Long> ids) {
         var res = staffs.findAllById(ids);
-        if (res.size() != ids.size()) {
-            var notFound = new ArrayList<>(ids);
-            notFound.removeAll(res.stream().map(Staff::getId).toList());
-            throw noSuchCandidatesException(notFound);
-        }
+        NotFoundExceptionFactory.containsAllOrThrow(
+                res.stream().map(Staff::getId).toList(), ids,
+                NotFoundExceptionFactory::noSuchStaffsException
+        );
         return StaffConvertor.staffInfoDtos(res);
     }
 
@@ -136,6 +136,16 @@ public class StaffServiceImpl implements StaffService {
     public void followVacancy(long id) {
         Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
         s.getVacancies().add(
+                vacancies.findById(id)
+                        .orElseThrow(() -> noSuchVacancyException(id))
+        );
+        staffs.save(s);
+    }
+
+    @Override
+    public void unfollowVacancy(long id) {
+        Staff s = staffs.getReferenceById(ContextUtils.getCurrentUserStaffId());
+        s.getVacancies().remove(
                 vacancies.findById(id)
                         .orElseThrow(() -> noSuchVacancyException(id))
         );

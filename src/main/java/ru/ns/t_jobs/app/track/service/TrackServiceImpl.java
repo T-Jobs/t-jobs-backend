@@ -17,14 +17,14 @@ import ru.ns.t_jobs.app.track.entity.TrackRepository;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 import ru.ns.t_jobs.auth.util.ContextUtils;
+import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
 import java.util.List;
-import java.util.Optional;
 
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchApplicationException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchCandidateException;
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchTrackException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchTrackException;
 
 @Service
 @RequiredArgsConstructor
@@ -37,14 +37,20 @@ public class TrackServiceImpl implements TrackService {
     private final InterviewRepository interviewRepository;
 
     @Override
-    public TrackInfoDto getTrackById(long id) {
-        Optional<Track> trackOp = trackRepository.findById(id);
-
-        if (trackOp.isEmpty())
-            throw noSuchTrackException(id);
-
-        Track track = trackOp.orElseThrow();
+    public TrackInfoDto getTrack(long id) {
+        Track track = trackRepository.findById(id)
+                .orElseThrow(() -> noSuchTrackException(id));
         return TrackConvertor.trackInfoDto(track);
+    }
+
+    @Override
+    public List<TrackInfoDto> getTracks(List<Long> ids) {
+        var res = trackRepository.findAllById(ids);
+        NotFoundExceptionFactory.containsAllOrThrow(
+                res.stream().map(Track::getId).toList(), ids,
+                NotFoundExceptionFactory::noSuchTracksException
+        );
+        return TrackConvertor.trackInfoDtos(res);
     }
 
     @Override
@@ -72,7 +78,7 @@ public class TrackServiceImpl implements TrackService {
                 .build();
 
         var res = trackRepository.save(newTrack);
-        List<Interview> interviews = InterviewConvertor.interviews(v.getInterviewBases(), res);
+        List<Interview> interviews = InterviewConvertor.interviews(v.getBaseInterviews(), res);
         interviews = interviewRepository.saveAll(interviews);
 
         res.setInterviews(interviews);

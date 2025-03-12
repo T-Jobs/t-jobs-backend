@@ -7,6 +7,7 @@ import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 
 import java.util.Comparator;
+import java.util.List;
 
 public class TrackConvertor {
 
@@ -17,10 +18,14 @@ public class TrackConvertor {
                 CandidateConvertor.candidateDto(track.getCandidate()),
                 VacancyConvertor.vacancyDto(track.getVacancy()),
                 track.isFinished(),
-                track.getInterviews().stream()
+                track.getInterviews() == null ? List.of() : track.getInterviews().stream()
                         .sorted(Comparator.comparingInt(Interview::getInterviewOrder))
                         .map(Interview::getId).toList(),
                 track.getLastStatus()
         );
+    }
+
+    public static List<TrackInfoDto> trackInfoDtos(List<Track> tracks) {
+        return tracks.stream().map(TrackConvertor::trackInfoDto).toList();
     }
 }

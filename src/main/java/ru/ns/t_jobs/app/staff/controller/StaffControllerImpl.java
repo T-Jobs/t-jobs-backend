@@ -77,4 +77,9 @@ public class StaffControllerImpl implements StaffController {
     public void followVacancy(long id) {
         staffService.followVacancy(id);
     }
+
+    @Override
+    public void unfollowVacancy(long id) {
+        staffService.unfollowVacancy(id);
+    }
 }

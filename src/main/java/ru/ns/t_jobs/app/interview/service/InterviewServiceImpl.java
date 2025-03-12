@@ -2,16 +2,17 @@ package ru.ns.t_jobs.app.interview.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.ns.t_jobs.app.interview.dto.InterviewBaseDto;
+import ru.ns.t_jobs.app.interview.dto.BaseInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.*;
+import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchBaseInterviewException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchInterviewException;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     private final InterviewRepository interviewRepository;
     private final InterviewTypeRepository interviewTypeRepository;
-    private final InterviewBaseRepository interviewBaseRepository;
+    private final BaseInterviewRepository baseInterviewRepository;
 
     @Override
     public InterviewDto getInterview(long id) {
@@ -34,11 +35,10 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     public List<InterviewDto> getInterviews(List<Long> ids) {
         var res = interviewRepository.findAllById(ids);
-        if (res.size() != ids.size()) {
-            var notFound = new ArrayList<>(ids);
-            notFound.removeAll(res.stream().map(Interview::getId).toList());
-            throw noSuchInterviewsException(notFound);
-        }
+        NotFoundExceptionFactory.containsAllOrThrow(
+                res.stream().map(Interview::getId).toList(), ids,
+                NotFoundExceptionFactory::noSuchInterviewsException
+        );
         return InterviewConvertor.interviewDtos(res);
     }
 
@@ -48,23 +48,22 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
-    public InterviewBaseDto getInterviewBase(long id) {
-        return InterviewConvertor.interviewBaseDto(
-                interviewBaseRepository.findById(id)
+    public BaseInterviewDto getBaseInterview(long id) {
+        return InterviewConvertor.baseInterviewsDto(
+                baseInterviewRepository.findById(id)
                         .orElseThrow(() -> noSuchBaseInterviewException(id))
         );
     }
 
     @Override
-    public List<InterviewBaseDto> getInterviewBases(List<Long> ids) {
-        var res = interviewBaseRepository.findAllById(ids);
-        if (res.size() != ids.size()) {
-            var notFound = new ArrayList<>(ids);
-            notFound.removeAll(res.stream().map(InterviewBase::getId).toList());
-            throw noSuchBaseInterviewsException(notFound);
-        }
-        return InterviewConvertor.interviewBaseDtos(
-                interviewBaseRepository.findAllById(ids)
+    public List<BaseInterviewDto> getBaseInterviews(List<Long> ids) {
+        var res = baseInterviewRepository.findAllById(ids);
+        NotFoundExceptionFactory.containsAllOrThrow(
+                res.stream().map(BaseInterview::getId).toList(), ids,
+                NotFoundExceptionFactory::noSuchBaseInterviewsException
+        );
+        return InterviewConvertor.baseInterviewDtos(
+                baseInterviewRepository.findAllById(ids)
         );
     }
 

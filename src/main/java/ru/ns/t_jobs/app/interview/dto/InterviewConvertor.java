@@ -1,7 +1,7 @@
 package ru.ns.t_jobs.app.interview.dto;
 
 import ru.ns.t_jobs.app.interview.entity.Interview;
-import ru.ns.t_jobs.app.interview.entity.InterviewBase;
+import ru.ns.t_jobs.app.interview.entity.BaseInterview;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.track.entity.Track;
 
@@ -28,20 +28,20 @@ public class InterviewConvertor {
         return i.stream().map(InterviewConvertor::interviewDto).toList();
     }
 
-    public static InterviewBaseDto interviewBaseDto(InterviewBase i) {
-        return new InterviewBaseDto(
+    public static BaseInterviewDto baseInterviewsDto(BaseInterview i) {
+        return new BaseInterviewDto(
                 i.getId(),
                 i.getInterviewType(),
                 i.getVacancy().getId()
         );
     }
 
-    public static List<InterviewBaseDto> interviewBaseDtos(List<InterviewBase> is) {
-        return is.stream().sorted(Comparator.comparingInt(InterviewBase::getInterviewOrder))
-                .map(InterviewConvertor::interviewBaseDto).toList();
+    public static List<BaseInterviewDto> baseInterviewDtos(List<BaseInterview> is) {
+        return is.stream().sorted(Comparator.comparingInt(BaseInterview::getInterviewOrder))
+                .map(InterviewConvertor::baseInterviewsDto).toList();
     }
 
-    public static Interview interview(InterviewBase base, Track track) {
+    public static Interview interview(BaseInterview base, Track track) {
         return Interview.builder()
                 .interviewOrder(base.getInterviewOrder())
                 .interviewType(base.getInterviewType())
@@ -52,7 +52,7 @@ public class InterviewConvertor {
                 .build();
     }
 
-    public static List<Interview> interviews(List<InterviewBase> bases, Track track) {
+    public static List<Interview> interviews(List<BaseInterview> bases, Track track) {
         return bases.stream().map(b -> interview(b, track)).toList();
     }
 }
