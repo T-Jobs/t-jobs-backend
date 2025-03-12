@@ -5,7 +5,12 @@ import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.interview.dto.BaseInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
-import ru.ns.t_jobs.app.interview.entity.*;
+import ru.ns.t_jobs.app.interview.entity.BaseInterview;
+import ru.ns.t_jobs.app.interview.entity.BaseInterviewRepository;
+import ru.ns.t_jobs.app.interview.entity.Interview;
+import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
+import ru.ns.t_jobs.app.interview.entity.InterviewType;
+import ru.ns.t_jobs.app.interview.entity.InterviewTypeRepository;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
 import java.util.List;

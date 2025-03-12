@@ -16,7 +16,8 @@ import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
 import java.util.List;
 
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.*;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchCandidateException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchResumeException;
 
 @Service
 @RequiredArgsConstructor
