@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public record NewVacancyDto(
+public record EditOrCreateVacancyDto(
         String name,
         String description,
         @JsonProperty("salary_min") Integer salaryMin,

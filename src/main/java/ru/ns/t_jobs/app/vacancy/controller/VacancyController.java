@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.ns.t_jobs.app.vacancy.dto.NewVacancyDto;
+import ru.ns.t_jobs.app.vacancy.dto.EditOrCreateVacancyDto;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
 
 import java.util.List;
@@ -22,8 +22,8 @@ public interface VacancyController {
             @RequestParam(name = "tagIds", required = false) List<Long> tagIds);
 
     @PostMapping("/create")
-    void createVacancy(@RequestBody NewVacancyDto vacancyDto);
+    VacancyDto createVacancy(@RequestBody EditOrCreateVacancyDto vacancyDto);
 
     @PostMapping("/edit/{id}")
-    void editVacancy(@RequestBody NewVacancyDto vacancyDto, @PathVariable("id") long id);
+    VacancyDto editVacancy(@RequestBody EditOrCreateVacancyDto vacancyDto, @PathVariable("id") long id);
 }

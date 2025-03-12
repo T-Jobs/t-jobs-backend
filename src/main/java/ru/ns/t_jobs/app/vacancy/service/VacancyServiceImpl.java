@@ -4,17 +4,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.interview.entity.InterviewBaseRepository;
+import ru.ns.t_jobs.app.interview.entity.InterviewTypeRepository;
 import ru.ns.t_jobs.app.staff.entity.StaffRepository;
 import ru.ns.t_jobs.app.tag.entity.TagRepository;
-import ru.ns.t_jobs.app.vacancy.dto.NewVacancyDto;
+import ru.ns.t_jobs.app.vacancy.dto.EditOrCreateVacancyDto;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
 import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchInterviewTypeException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
 
 @Service
@@ -25,6 +29,7 @@ public class VacancyServiceImpl implements VacancyService {
     private final StaffRepository staffRepository;
     private final InterviewBaseRepository interviewBaseRepository;
     private final TagRepository tagRepository;
+    private final InterviewTypeRepository interviewTypeRepository;
 
     @Override
     public List<VacancyDto> searchVacancies(String text, int page, int pageSize, int salaryLowerBound, List<Long> tagIds) {
@@ -40,24 +45,34 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void createVacancy(NewVacancyDto vacancyDto) {
-        vacancyRepository.save(createFrom(vacancyDto));
+    public VacancyDto createVacancy(EditOrCreateVacancyDto vacancyDto) {
+        return VacancyConvertor.vacancyDto(vacancyRepository.save(createFrom(vacancyDto)));
     }
 
-    private Vacancy createFrom(NewVacancyDto v) {
+    private Vacancy createFrom(EditOrCreateVacancyDto v) {
+        List<InterviewBase> baseInterviews = new ArrayList<>();
+        for (int i = 0; i < v.interviews().size(); i++) {
+            final long baseId = v.interviews().get(i);
+            baseInterviews.add(InterviewBase.builder()
+                    .interviewOrder(i)
+                    .interviewType(interviewTypeRepository.findById(baseId)
+                            .orElseThrow(() -> noSuchInterviewTypeException(baseId)))
+                    .build());
+        }
+
         return Vacancy.builder()
                 .name(v.name())
                 .description(v.description())
                 .salaryMin(v.salaryMin())
                 .salaryMax(v.salaryMax())
                 .town(v.town())
-                .interviewBases(interviewBaseRepository.findAllById(v.interviews()))
+                .interviewBases(baseInterviews)
                 .tags(tagRepository.findAllById(v.tags()))
                 .build();
     }
 
     @Override
-    public void editVacancy(NewVacancyDto vacancyDto, long id) {
+    public VacancyDto editVacancy(EditOrCreateVacancyDto vacancyDto, long id) {
         Vacancy vacancy = vacancyRepository.findById(id)
                 .orElseThrow(() -> noSuchVacancyException(id));
 
@@ -68,6 +83,6 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setTown(vacancyDto.town());
         vacancy.setInterviewBases(interviewBaseRepository.findAllById(vacancyDto.interviews()));
         vacancy.setTags(tagRepository.findAllById(vacancyDto.tags()));
-        vacancyRepository.save(vacancy);
+        return VacancyConvertor.vacancyDto(vacancyRepository.save(vacancy));
     }
 }

@@ -5,6 +5,7 @@ import ru.ns.t_jobs.app.interview.entity.InterviewBase;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.track.entity.Track;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class InterviewConvertor {
@@ -27,13 +28,13 @@ public class InterviewConvertor {
         return new InterviewBaseDto(
                 i.getId(),
                 i.getInterviewType(),
-                i.getVacancy().getId(),
-                i.getInterviewOrder()
+                i.getVacancy().getId()
         );
     }
 
     public static List<InterviewBaseDto> interviewBaseDtos(List<InterviewBase> is) {
-        return is.stream().map(InterviewConvertor::interviewBaseDto).toList();
+        return is.stream().sorted(Comparator.comparingInt(InterviewBase::getInterviewOrder))
+                .map(InterviewConvertor::interviewBaseDto).toList();
     }
 
     public static Interview interview(InterviewBase base, Track track) {
