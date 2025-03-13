@@ -8,6 +8,7 @@ import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
+import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.staff.entity.StaffRepository;
 import ru.ns.t_jobs.app.track.dto.TrackConvertor;
@@ -97,6 +98,26 @@ public class TrackServiceImpl implements TrackService {
         Staff hr = staffRepository.findById(hrId).orElseThrow(() -> noSuchStaffException(hrId));
 
         t.setHr(hr);
+        trackRepository.save(t);
+    }
+
+    @Override
+    public void finishTrack(long id) {
+        Track t = trackRepository.findById(id).orElseThrow(() -> noSuchTrackException(id));
+
+        t.setFinished(true);
+        InterviewStatus lastStatus = InterviewStatus.NONE;
+        for (Interview i : t.getInterviews()) {
+            if (i.getStatus() == InterviewStatus.FAILED || i.getStatus() == InterviewStatus.SUCCESS) {
+                lastStatus = i.getStatus();
+            } else {
+                i.setStatus(InterviewStatus.NONE);
+                i.setAbleSetTime(false);
+            }
+        }
+        t.setLastStatus(lastStatus);
+
+        interviewRepository.saveAll(t.getInterviews());
         trackRepository.save(t);
     }
 }

@@ -32,4 +32,9 @@ public class TrackControllerImpl implements TrackController {
     public void setHr(long trackId, long hrId) {
         trackService.setHr(trackId, hrId);
     }
+
+    @Override
+    public void finishTrack(long trackId) {
+        trackService.finishTrack(trackId);
+    }
 }

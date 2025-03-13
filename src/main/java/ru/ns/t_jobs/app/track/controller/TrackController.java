@@ -22,4 +22,7 @@ public interface TrackController {
 
     @PostMapping("track/set-hr")
     void setHr(@RequestParam("track_id") long trackId, @RequestParam("hr_id") long hrId);
+
+    @PostMapping("track/finish")
+    void finishTrack(@RequestParam("id") long trackId);
 }
