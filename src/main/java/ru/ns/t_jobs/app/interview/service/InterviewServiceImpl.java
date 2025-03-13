@@ -1,6 +1,7 @@
 package ru.ns.t_jobs.app.interview.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.interview.dto.BaseInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
@@ -9,8 +10,13 @@ import ru.ns.t_jobs.app.interview.entity.BaseInterview;
 import ru.ns.t_jobs.app.interview.entity.BaseInterviewRepository;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
+import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.interview.entity.InterviewTypeRepository;
+import ru.ns.t_jobs.app.staff.entity.Staff;
+import ru.ns.t_jobs.app.staff.entity.StaffRepository;
+import ru.ns.t_jobs.app.track.entity.Track;
+import ru.ns.t_jobs.app.track.entity.TrackRepository;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
 import java.util.List;
@@ -26,6 +32,8 @@ public class InterviewServiceImpl implements InterviewService {
     private final InterviewRepository interviewRepository;
     private final InterviewTypeRepository interviewTypeRepository;
     private final BaseInterviewRepository baseInterviewRepository;
+    private final StaffRepository staffRepository;
+    private final TrackRepository trackRepository;
 
     @Override
     public InterviewDto getInterview(long id) {
@@ -70,6 +78,55 @@ public class InterviewServiceImpl implements InterviewService {
         return InterviewConvertor.baseInterviewDtos(
                 baseInterviewRepository.findAllById(ids)
         );
+    }
+
+    @Override
+    public void deleteInterview(long id) {
+        Interview interview = interviewRepository.findById(id)
+                .orElseThrow(() -> noSuchInterviewException(id));
+        Track track = interview.getTrack();
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS
+                || track.isFinished()) {
+            throw new RuntimeException();
+        }
+
+        track = trackRepository.getReferenceById(track.getId());
+        interviewRepository.delete(interview);
+        updateLastStatus(track);
+        findInterviewerIfNeeded(track);
+    }
+
+    private void findInterviewerIfNeeded(Track track) {
+        if (track.getInterviews() == null) return;
+
+        for (Interview i : track.getInterviews()) {
+            if (i.getStatus() != InterviewStatus.SUCCESS) {
+                if (i.getInterviewer() == null) {
+                    Staff interviewer = staffRepository.findRandomStaffByInterviewType(i.getInterviewType())
+                            .orElseThrow();
+                    i.setInterviewer(interviewer);
+                    interviewRepository.save(i);
+                }
+
+                return;
+            }
+        }
+    }
+
+    private void updateLastStatus(Track track) {
+        if (track.getInterviews() == null) return;
+
+        InterviewStatus lastStatus = InterviewStatus.NONE;
+        for (Interview i : track.getInterviews()) {
+            if (i.getStatus() != InterviewStatus.SUCCESS || i == track.getInterviews().getLast()) {
+                lastStatus = i.getStatus();
+                break;
+            }
+        }
+
+        track.setLastStatus(lastStatus);
+        trackRepository.save(track);
     }
 
 }

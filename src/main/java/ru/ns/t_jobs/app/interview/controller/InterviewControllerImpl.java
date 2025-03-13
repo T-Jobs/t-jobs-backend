@@ -39,4 +39,9 @@ public class InterviewControllerImpl implements InterviewController {
     public List<BaseInterviewDto> getBaseInterviews(List<Long> ids) {
         return interviewService.getBaseInterviews(ids);
     }
+
+    @Override
+    public void deleteInterview(long id) {
+        interviewService.deleteInterview(id);
+    }
 }

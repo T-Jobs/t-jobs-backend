@@ -1,5 +1,6 @@
 package ru.ns.t_jobs.app.interview.controller;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,4 +30,7 @@ public interface InterviewController {
 
     @GetMapping("/base")
     List<BaseInterviewDto> getBaseInterviews(@RequestParam("ids") List<Long> ids);
+
+    @DeleteMapping("/{id}")
+    void deleteInterview(@PathVariable("id") long id);
 }

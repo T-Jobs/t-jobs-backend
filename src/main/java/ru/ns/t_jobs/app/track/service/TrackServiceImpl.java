@@ -20,6 +20,7 @@ import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 import ru.ns.t_jobs.auth.util.ContextUtils;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchApplicationException;
@@ -105,19 +106,20 @@ public class TrackServiceImpl implements TrackService {
     public void finishTrack(long id) {
         Track t = trackRepository.findById(id).orElseThrow(() -> noSuchTrackException(id));
 
-        t.setFinished(true);
         InterviewStatus lastStatus = InterviewStatus.NONE;
+        List<Interview> toDelete = new ArrayList<>();
         for (Interview i : t.getInterviews()) {
             if (i.getStatus() == InterviewStatus.FAILED || i.getStatus() == InterviewStatus.SUCCESS) {
                 lastStatus = i.getStatus();
             } else {
-                i.setStatus(InterviewStatus.NONE);
-                i.setAbleSetTime(false);
+                toDelete.add(i);
             }
         }
-        t.setLastStatus(lastStatus);
 
-        interviewRepository.saveAll(t.getInterviews());
+        t.setFinished(true);
+        t.setLastStatus(lastStatus);
         trackRepository.save(t);
+
+        interviewRepository.deleteAll(toDelete);
     }
 }

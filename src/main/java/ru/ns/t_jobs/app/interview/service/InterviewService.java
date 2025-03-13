@@ -12,4 +12,5 @@ public interface InterviewService {
     List<InterviewType> searchInterviewTypes(String name);
     BaseInterviewDto getBaseInterview(long id);
     List<BaseInterviewDto> getBaseInterviews(List<Long> ids);
+    void deleteInterview(long id);
 }
