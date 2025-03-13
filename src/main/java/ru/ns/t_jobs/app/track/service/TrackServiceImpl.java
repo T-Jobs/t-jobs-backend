@@ -23,8 +23,9 @@ import java.util.List;
 
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchApplicationException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchCandidateException;
-import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchStaffException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchTrackException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +82,21 @@ public class TrackServiceImpl implements TrackService {
         List<Interview> interviews = InterviewConvertor.interviews(v.getBaseInterviews(), res);
         interviews = interviewRepository.saveAll(interviews);
 
+        Staff interviewer = staffRepository.findRandomStaffByInterviewType(interviews.getFirst().getInterviewType())
+                .orElseThrow();
+        interviews.getFirst().setInterviewer(interviewer);
+        interviewRepository.save(interviews.getFirst());
+
         res.setInterviews(interviews);
         return TrackConvertor.trackInfoDto(res);
+    }
+
+    @Override
+    public void setHr(long trackId, long hrId) {
+        Track t = trackRepository.findById(trackId).orElseThrow(() -> noSuchTrackException(trackId));
+        Staff hr = staffRepository.findById(hrId).orElseThrow(() -> noSuchStaffException(hrId));
+
+        t.setHr(hr);
+        trackRepository.save(t);
     }
 }

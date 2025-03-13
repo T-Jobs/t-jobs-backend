@@ -27,4 +27,9 @@ public class TrackControllerImpl implements TrackController {
     public TrackInfoDto approveApplication(long candidateId, long vacancyId) {
         return trackService.approveApplication(candidateId, vacancyId);
     }
+
+    @Override
+    public void setHr(long trackId, long hrId) {
+        trackService.setHr(trackId, hrId);
+    }
 }

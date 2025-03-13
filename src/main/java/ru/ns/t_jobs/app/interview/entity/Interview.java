@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.track.entity.Track;
 
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Builder
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "interview")

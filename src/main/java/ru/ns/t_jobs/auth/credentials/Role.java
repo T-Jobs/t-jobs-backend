@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "role")
 @Getter
@@ -19,5 +21,17 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return "ROLE_" + getName();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Role role)) return false;
+        return Objects.equals(name, role.name);
     }
 }
