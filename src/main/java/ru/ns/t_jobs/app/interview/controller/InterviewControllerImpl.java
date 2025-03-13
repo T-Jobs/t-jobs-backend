@@ -3,6 +3,7 @@ package ru.ns.t_jobs.app.interview.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ns.t_jobs.app.interview.dto.BaseInterviewDto;
+import ru.ns.t_jobs.app.interview.dto.CreateInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.interview.service.InterviewService;
@@ -43,5 +44,10 @@ public class InterviewControllerImpl implements InterviewController {
     @Override
     public void deleteInterview(long id) {
         interviewService.deleteInterview(id);
+    }
+
+    @Override
+    public InterviewDto addInterview(CreateInterviewDto createInterviewDto) {
+        return interviewService.addInterview(createInterviewDto);
     }
 }

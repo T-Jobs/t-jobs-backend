@@ -3,9 +3,12 @@ package ru.ns.t_jobs.app.interview.controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.ns.t_jobs.app.interview.dto.BaseInterviewDto;
+import ru.ns.t_jobs.app.interview.dto.CreateInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 
@@ -33,4 +36,7 @@ public interface InterviewController {
 
     @DeleteMapping("/{id}")
     void deleteInterview(@PathVariable("id") long id);
+
+    @PostMapping("/add-to-track")
+    InterviewDto addInterview(@RequestBody CreateInterviewDto createInterviewDto);
 }

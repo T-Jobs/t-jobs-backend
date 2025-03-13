@@ -1,6 +1,7 @@
 package ru.ns.t_jobs.app.interview.service;
 
 import ru.ns.t_jobs.app.interview.dto.BaseInterviewDto;
+import ru.ns.t_jobs.app.interview.dto.CreateInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 
@@ -13,4 +14,5 @@ public interface InterviewService {
     BaseInterviewDto getBaseInterview(long id);
     List<BaseInterviewDto> getBaseInterviews(List<Long> ids);
     void deleteInterview(long id);
+    InterviewDto addInterview(CreateInterviewDto createInterviewDto);
 }
