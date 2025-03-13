@@ -15,4 +15,5 @@ public interface InterviewService {
     List<BaseInterviewDto> getBaseInterviews(List<Long> ids);
     void deleteInterview(long id);
     InterviewDto addInterview(CreateInterviewDto createInterviewDto);
+    void setInterviewer(long interviewId, long interviewerId);
 }

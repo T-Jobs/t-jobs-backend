@@ -141,6 +141,21 @@ public class InterviewServiceImpl implements InterviewService {
         return res;
     }
 
+    @Override
+    public void setInterviewer(long interviewId, long interviewerId) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> noSuchInterviewException(interviewId));
+        Staff interviewer = staffRepository.findById(interviewerId)
+                .orElseThrow(() -> noSuchStaffException(interviewerId));
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
+            throw new RuntimeException();
+        }
+
+        interview.setInterviewer(interviewer);
+        interviewRepository.save(interview);
+    }
+
     private void validateInterviewOrder(Track track) {
         if (track.getInterviews() == null) return;
 

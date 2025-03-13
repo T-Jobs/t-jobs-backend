@@ -42,6 +42,11 @@ public class InterviewControllerImpl implements InterviewController {
     }
 
     @Override
+    public void setInterviewer(long interviewId, long interviewerId) {
+        interviewService.setInterviewer(interviewId, interviewerId);
+    }
+
+    @Override
     public void deleteInterview(long id) {
         interviewService.deleteInterview(id);
     }

@@ -39,4 +39,7 @@ public interface InterviewController {
 
     @PostMapping("/add-to-track")
     InterviewDto addInterview(@RequestBody CreateInterviewDto createInterviewDto);
+
+    @PostMapping("/set-interviewer")
+    void setInterviewer(@RequestParam("interview_id") long interviewId, @RequestParam("interviewer_id") long interviewerId);
 }
