@@ -57,15 +57,18 @@ public class Interview {
     @Enumerated(EnumType.STRING)
     private InterviewStatus status;
 
-    @Column(name = "able_set_time")
-    private boolean ableSetTime;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "track_id", referencedColumnName = "id")
     private Track track;
 
     @Column(name = "link", columnDefinition = "TEXT")
     private String link;
+
+    public boolean isAbleSetTime() {
+        if (status == InterviewStatus.SUCCESS || status == InterviewStatus.FAILED) return false;
+        return interviewOrder == 0 || track.getInterviews()
+                .get(interviewOrder - 1).getStatus() == InterviewStatus.SUCCESS;
+    }
 }
 
 

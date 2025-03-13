@@ -14,6 +14,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
     @Query("SELECT s FROM Staff s WHERE CONCAT(lower(s.name), lower(s.surname)) LIKE %:text%")
     List<Staff> findByText(@Param("text") String text);
 
-    @Query("SELECT s FROM Staff s JOIN s.interviewTypes it WHERE :type in it ORDER BY RANDOM()")
+    @Query("SELECT s FROM Staff s JOIN s.interviewTypes it WHERE it = :type ORDER BY RAND()")
     Optional<Staff> findRandomStaffByInterviewType(@Param("type") InterviewType type);
 }

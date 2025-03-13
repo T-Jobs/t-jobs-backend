@@ -118,7 +118,6 @@ public class InterviewServiceImpl implements InterviewService {
                 .track(t)
                 .dateApproved(false)
                 .datePicked(null)
-                .ableSetTime(false)
                 .interviewer(null)
                 .status(InterviewStatus.NONE)
                 .feedback(null)
@@ -131,10 +130,6 @@ public class InterviewServiceImpl implements InterviewService {
                     .orElseThrow(() -> noSuchStaffException(createInterviewDto.interviewerId()));
 
             interview.setInterviewer(interviewer);
-        }
-
-        if (interview.getInterviewOrder() == 0 || interview.getInterviewOrder() == t.getInterviews().size() && t.getLastStatus() == InterviewStatus.SUCCESS) {
-            interview.setAbleSetTime(true);
         }
 
         var res = InterviewConvertor.interviewDto(interviewRepository.save(interview));

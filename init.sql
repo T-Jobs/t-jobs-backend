@@ -124,7 +124,6 @@ CREATE TABLE interview (
     date_approved       BOOLEAN DEFAULT FALSE,
     feedback            TEXT ,
     status              ENUM('FAILED', 'SUCCESS', 'WAITING_FEEDBACK', 'TIME_APPROVAL', 'NONE'),
-    able_set_time       BOOLEAN,
     link                TEXT,
 
     PRIMARY KEY (id),
@@ -134,11 +133,11 @@ CREATE TABLE interview (
     FOREIGN KEY (interviewer_id)    REFERENCES staff(id)
 );
 
-INSERT INTO interview (interview_type_id, track_id, interviewer_id, date_picked, date_approved, feedback, interview_order, status, able_set_time) VALUES
-    (3, 1, 1,       '2024-10-01 12:23:00',  TRUE, 'Нормально',      1, 'SUCCESS',       FALSE),
-    (2, 1, 3,       '2025-10-02 17:45:00',  FALSE, NULL,            2, 'TIME_APPROVAL', TRUE),
-    (1, 1, NULL,    NULL,                   FALSE, NULL,            3, 'NONE', FALSE),
-    (3, 2, 1,       '2024-09-12 10:30:00',  TRUE, 'Overqualified',  1, 'FAILED', FALSE);
+INSERT INTO interview (interview_type_id, track_id, interviewer_id, date_picked, date_approved, feedback, interview_order, status) VALUES
+    (3, 1, 1,       '2024-10-01 12:23:00',  TRUE, 'Нормально',      1, 'SUCCESS'),
+    (2, 1, 3,       '2025-10-02 17:45:00',  FALSE, NULL,            2, 'TIME_APPROVAL'),
+    (1, 1, NULL,    NULL,                   FALSE, NULL,            3, 'NONE'),
+    (3, 2, 1,       '2024-09-12 10:30:00',  TRUE, 'Overqualified',  1, 'FAILED');
 
 CREATE TABLE interview_type_staff (
     interview_type_id   BIGINT UNSIGNED NOT NULL,
