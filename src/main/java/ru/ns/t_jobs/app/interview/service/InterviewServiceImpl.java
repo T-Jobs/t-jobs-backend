@@ -20,6 +20,7 @@ import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.track.entity.TrackRepository;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -96,8 +97,8 @@ public class InterviewServiceImpl implements InterviewService {
             throw new RuntimeException();
         }
 
-        track = trackRepository.getReferenceById(track.getId());
         interviewRepository.delete(interview);
+        track = trackRepository.getReferenceById(track.getId());
         updateLastStatus(track);
         findInterviewerIfNeeded(track);
         validateInterviewOrder(track);
@@ -132,13 +133,13 @@ public class InterviewServiceImpl implements InterviewService {
             interview.setInterviewer(interviewer);
         }
 
-        var res = InterviewConvertor.interviewDto(interviewRepository.save(interview));
+        var res = interviewRepository.save(interview);
 
         t = trackRepository.getReferenceById(t.getId());
         findInterviewerIfNeeded(t);
         updateLastStatus(t);
 
-        return res;
+        return InterviewConvertor.interviewDto(interviewRepository.getReferenceById(res.getId()));
     }
 
     @Override
@@ -154,6 +155,62 @@ public class InterviewServiceImpl implements InterviewService {
 
         interview.setInterviewer(interviewer);
         interviewRepository.save(interview);
+    }
+
+    @Override
+    public void setAutoInterviewer(long interviewId) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> noSuchInterviewException(interviewId));
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
+            throw new RuntimeException();
+        }
+
+        Staff interviewer = staffRepository.findRandomStaffByInterviewType(interview.getInterviewType())
+                .orElseThrow();
+
+        interview.setInterviewer(interviewer);
+        interviewRepository.save(interview);
+    }
+
+    @Override
+    public void setDate(long interviewId, LocalDateTime date) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> noSuchInterviewException(interviewId));
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
+            throw new RuntimeException();
+        }
+
+        int pos = interview.getInterviewOrder();
+        Track t = interview.getTrack();
+        if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
+            interview.setDatePicked(date);
+            interview.setDateApproved(true);
+            interviewRepository.save(interview);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public void setAutoDate(long interviewId) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> noSuchInterviewException(interviewId));
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
+            throw new RuntimeException();
+        }
+
+        int pos = interview.getInterviewOrder();
+        Track t = interview.getTrack();
+        if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
+            interview.setDatePicked(null);
+            interview.setDateApproved(false);
+            interviewRepository.save(interview);
+        } else {
+            throw new RuntimeException();
+        }
     }
 
     private void validateInterviewOrder(Track track) {

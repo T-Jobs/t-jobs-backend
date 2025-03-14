@@ -5,6 +5,7 @@ import ru.ns.t_jobs.app.interview.dto.CreateInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface InterviewService {
@@ -16,4 +17,7 @@ public interface InterviewService {
     void deleteInterview(long id);
     InterviewDto addInterview(CreateInterviewDto createInterviewDto);
     void setInterviewer(long interviewId, long interviewerId);
+    void setAutoInterviewer(long interviewId);
+    void setDate(long interviewId, LocalDateTime date);
+    void setAutoDate(long interviewId);
 }

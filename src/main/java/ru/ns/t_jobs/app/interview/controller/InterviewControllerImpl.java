@@ -8,6 +8,7 @@ import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.interview.service.InterviewService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -44,6 +45,21 @@ public class InterviewControllerImpl implements InterviewController {
     @Override
     public void setInterviewer(long interviewId, long interviewerId) {
         interviewService.setInterviewer(interviewId, interviewerId);
+    }
+
+    @Override
+    public void setDate(long interviewId, LocalDateTime date) {
+        interviewService.setDate(interviewId, date);
+    }
+
+    @Override
+    public void setAutoDate(long interviewId) {
+        interviewService.setAutoDate(interviewId);
+    }
+
+    @Override
+    public void setAutoInterviewer(long interviewId) {
+        interviewService.setAutoInterviewer(interviewId);
     }
 
     @Override

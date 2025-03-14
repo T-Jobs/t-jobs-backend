@@ -12,6 +12,7 @@ import ru.ns.t_jobs.app.interview.dto.CreateInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequestMapping("/interview")
@@ -42,4 +43,14 @@ public interface InterviewController {
 
     @PostMapping("/set-interviewer")
     void setInterviewer(@RequestParam("interview_id") long interviewId, @RequestParam("interviewer_id") long interviewerId);
+
+    @PostMapping("/set-auto-interviewer")
+    void setAutoInterviewer(@RequestParam("interview_id") long interviewId);
+
+    @PostMapping("/set-date")
+    void setDate(@RequestParam("interview_id") long interviewId, @RequestParam("date") LocalDateTime date);
+
+
+    @PostMapping("/set-auto-date")
+    void setAutoDate(@RequestParam("interview_id") long interviewId);
 }
