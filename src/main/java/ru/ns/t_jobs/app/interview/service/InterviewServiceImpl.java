@@ -1,7 +1,6 @@
 package ru.ns.t_jobs.app.interview.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import ru.ns.t_jobs.app.interview.dto.BaseInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.CreateInterviewDto;
@@ -19,6 +18,7 @@ import ru.ns.t_jobs.app.staff.entity.StaffRepository;
 import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.track.entity.TrackRepository;
 import ru.ns.t_jobs.auth.util.ContextUtils;
+import ru.ns.t_jobs.handler.exception.BadRequestException;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
 import java.time.LocalDateTime;
@@ -93,9 +93,8 @@ public class InterviewServiceImpl implements InterviewService {
                 .orElseThrow(() -> noSuchInterviewException(id));
         Track track = interview.getTrack();
 
-        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS
-                || track.isFinished()) {
-            throw new RuntimeException();
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
+            throw new BadRequestException("Interview %d is finished.".formatted(id));
         }
 
         interviewRepository.delete(interview);
@@ -110,7 +109,7 @@ public class InterviewServiceImpl implements InterviewService {
         Track t = trackRepository.findById(createInterviewDto.trackId())
                 .orElseThrow(() -> noSuchTrackException(createInterviewDto.trackId()));
 
-        if (t.isFinished()) throw new RuntimeException();
+        if (t.isFinished()) throw new BadRequestException("%d Track is finished.".formatted(t.getId()));
 
         InterviewType type = interviewTypeRepository.findById(createInterviewDto.interviewTypeId())
                 .orElseThrow(() -> noSuchInterviewTypeException(createInterviewDto.interviewTypeId()));
@@ -151,7 +150,7 @@ public class InterviewServiceImpl implements InterviewService {
                 .orElseThrow(() -> noSuchStaffException(interviewerId));
 
         if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
-            throw new RuntimeException();
+            throw new BadRequestException("Interview %d is finished.".formatted(interviewId));
         }
 
         interview.setInterviewer(interviewer);
@@ -164,7 +163,7 @@ public class InterviewServiceImpl implements InterviewService {
                 .orElseThrow(() -> noSuchInterviewException(interviewId));
 
         if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
-            throw new RuntimeException();
+            throw new BadRequestException("Interview %d is finished.".formatted(interviewId));
         }
 
         Staff interviewer = staffRepository.findRandomStaffByInterviewType(interview.getInterviewType())
@@ -180,7 +179,7 @@ public class InterviewServiceImpl implements InterviewService {
                 .orElseThrow(() -> noSuchInterviewException(interviewId));
 
         if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
-            throw new RuntimeException();
+            throw new BadRequestException("Interview %d is finished.".formatted(interviewId));
         }
 
         int pos = interview.getInterviewOrder();
@@ -188,9 +187,13 @@ public class InterviewServiceImpl implements InterviewService {
         if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
             interview.setDatePicked(date);
             interview.setDateApproved(true);
+            interview.setStatus(InterviewStatus.WAITING_FEEDBACK);
             interviewRepository.save(interview);
+
+            t.setLastStatus(InterviewStatus.WAITING_FEEDBACK);
+            trackRepository.save(t);
         } else {
-            throw new RuntimeException();
+            throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }
     }
 
@@ -200,7 +203,7 @@ public class InterviewServiceImpl implements InterviewService {
                 .orElseThrow(() -> noSuchInterviewException(interviewId));
 
         if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
-            throw new RuntimeException();
+            throw new BadRequestException("Interview %d is finished.".formatted(interviewId));
         }
 
         int pos = interview.getInterviewOrder();
@@ -210,7 +213,7 @@ public class InterviewServiceImpl implements InterviewService {
             interview.setDateApproved(false);
             interviewRepository.save(interview);
         } else {
-            throw new RuntimeException();
+            throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }
     }
 
@@ -220,7 +223,7 @@ public class InterviewServiceImpl implements InterviewService {
                 .orElseThrow(() -> noSuchInterviewException(interviewId));
 
         if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
-            throw new RuntimeException();
+            throw new BadRequestException("Interview %d is finished.".formatted(interviewId));
         }
 
         interview.setLink(link);
@@ -233,7 +236,13 @@ public class InterviewServiceImpl implements InterviewService {
                 .orElseThrow(() -> noSuchInterviewException(interviewId));
 
         if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
-            throw new RuntimeException();
+            throw new BadRequestException("Interview %d is finished.".formatted(interviewId));
+        }
+
+        Staff interviewer = interview.getInterviewer();
+        if (!Objects.equals(interviewer.getId(), ContextUtils.getCurrentUserStaffId())
+                || interview.getStatus() != InterviewStatus.WAITING_FEEDBACK) {
+            throw new BadRequestException("Unable to set feedback.");
         }
 
         int pos = interview.getInterviewOrder();
@@ -251,7 +260,7 @@ public class InterviewServiceImpl implements InterviewService {
             updateLastStatus(t);
             findInterviewerIfNeeded(t);
         } else {
-            throw new RuntimeException();
+            throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }
     }
 
@@ -263,7 +272,7 @@ public class InterviewServiceImpl implements InterviewService {
         if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS
                 || interview.getDatePicked() == null || interview.isDateApproved()
                 || !Objects.equals(interview.getInterviewer().getId(), ContextUtils.getCurrentUserStaffId())) {
-            throw new RuntimeException();
+            throw new BadRequestException("");
         }
 
         int pos = interview.getInterviewOrder();
@@ -272,7 +281,7 @@ public class InterviewServiceImpl implements InterviewService {
             interview.setDateApproved(true);
             interviewRepository.save(interview);
         } else {
-            throw new RuntimeException();
+            throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }
     }
 
@@ -284,7 +293,7 @@ public class InterviewServiceImpl implements InterviewService {
         if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS
                 || interview.getDatePicked() == null
                 || !Objects.equals(interview.getInterviewer().getId(), ContextUtils.getCurrentUserStaffId())) {
-            throw new RuntimeException();
+            throw new BadRequestException("Either interview is finished or you not the who conducting this interview.");
         }
 
         int pos = interview.getInterviewOrder();
@@ -294,7 +303,7 @@ public class InterviewServiceImpl implements InterviewService {
             interview.setDateApproved(false);
             interviewRepository.save(interview);
         } else {
-            throw new RuntimeException();
+            throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }
     }
 

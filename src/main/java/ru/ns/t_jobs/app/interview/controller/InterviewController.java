@@ -48,8 +48,7 @@ public interface InterviewController {
     void setAutoInterviewer(@RequestParam("interview_id") long interviewId);
 
     @PostMapping("/set-date")
-    void setDate(@RequestParam("interview_id") long interviewId, @RequestParam("date") LocalDateTime date);
-
+    void setDate(@RequestParam("interview_id") long interviewId, @RequestParam("date") String date);
 
     @PostMapping("/set-auto-date")
     void setAutoDate(@RequestParam("interview_id") long interviewId);

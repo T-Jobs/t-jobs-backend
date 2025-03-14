@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public record InterviewDto(
         long id,
         @JsonProperty("interviewer_id")
-        long interviewerId,
+        Long interviewerId,
         InterviewType interviewType,
         @JsonProperty("track_id")
         long trackId,

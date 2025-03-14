@@ -21,9 +21,11 @@ import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchApplicationException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchCandidateException;
+import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchHrException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchStaffException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchTrackException;
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchVacancyException;
@@ -97,6 +99,10 @@ public class TrackServiceImpl implements TrackService {
         Track t = trackRepository.findById(trackId).orElseThrow(() -> noSuchTrackException(trackId));
         Staff hr = staffRepository.findById(hrId).orElseThrow(() -> noSuchStaffException(hrId));
 
+        if (hr.getRoles().stream().noneMatch(r -> Objects.equals(r.getName(), "HR"))) {
+            throw noSuchHrException(hrId);
+        }
+
         t.setHr(hr);
         trackRepository.save(t);
     }
@@ -127,7 +133,7 @@ public class TrackServiceImpl implements TrackService {
         Candidate c = candidateRepository.findById(candidateId)
                 .orElseThrow(() -> noSuchCandidateException(candidateId));
 
-        Vacancy v = vacancyRepository.findById(candidateId)
+        Vacancy v = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> noSuchVacancyException(vacancyId));
         Staff s = staffRepository.getReferenceById(ContextUtils.getCurrentUserStaffId());
 

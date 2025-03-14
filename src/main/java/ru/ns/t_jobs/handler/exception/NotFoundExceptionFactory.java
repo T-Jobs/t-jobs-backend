@@ -94,6 +94,10 @@ public class NotFoundExceptionFactory {
         return new NoSuchElementException("No staffs with %s ids.".formatted(ids));
     }
 
+    public static NoSuchElementException noSuchHrException(long id) {
+        return new NoSuchElementException("No hr with %d id.".formatted(id));
+    }
+
     // Tag
 
     public static NoSuchElementException noSuchTagException(long id) {

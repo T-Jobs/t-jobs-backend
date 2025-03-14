@@ -9,6 +9,7 @@ import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.interview.service.InterviewService;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -48,8 +49,9 @@ public class InterviewControllerImpl implements InterviewController {
     }
 
     @Override
-    public void setDate(long interviewId, LocalDateTime date) {
-        interviewService.setDate(interviewId, date);
+    public void setDate(long interviewId, String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        interviewService.setDate(interviewId, LocalDateTime.parse(date, formatter));
     }
 
     @Override

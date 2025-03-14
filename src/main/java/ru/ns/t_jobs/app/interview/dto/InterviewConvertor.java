@@ -12,7 +12,7 @@ public class InterviewConvertor {
     public static InterviewDto interviewDto(Interview i) {
         return new InterviewDto(
                 i.getId(),
-                i.getInterviewer().getId(),
+                i.getInterviewer() == null ? null : i.getInterviewer().getId(),
                 i.getInterviewType(),
                 i.getTrack().getId(),
                 i.getDatePicked(),

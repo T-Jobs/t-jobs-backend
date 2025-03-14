@@ -3,6 +3,7 @@ package ru.ns.t_jobs.auth.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -34,7 +35,10 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    AuthenticationProvider authProvider,
                                                    JwtTokenFilter tokenFilter) throws Exception {
-        String[] hrPaths = {"/user/tracks", "/vacancy/create", "/vacancy/edit/**", "/track/approve-application"};
+        String[] hrPaths = {"/user/tracks", "/vacancy/create", "/vacancy/edit/**",
+                "/track/approve-application", "/track/create", "/track/set-hr", "/track/finish",
+                "/interview/set-interviewer", "/interview/set-auto-interviewer", "/interview/set-date",
+                "/interview/set-auto-date", "/interview/set-link", "/interview/set-feedback", "/interview/add-to-track"};
         String[] interviewerPaths = {"/user/set-interviewer-mode", "/user/competencies"};
 
         return http.csrf(AbstractHttpConfigurer::disable)
@@ -42,7 +46,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         authorize -> authorize
                                 .requestMatchers("/auth/login").permitAll()
                                 .requestMatchers(hrPaths).hasRole("HR")
-                                .requestMatchers("user/follow-vacancy/**", "user/vacancies").hasAnyRole("HR", "TL")
+                                .requestMatchers(HttpMethod.DELETE, "/interview/**").hasRole("HR")
+                                .requestMatchers("/user/follow-vacancy/**", "/user/vacancies").hasAnyRole("HR", "TL")
                                 .requestMatchers(interviewerPaths).hasRole("INTERVIEWER")
                                 .anyRequest().authenticated()
                 )

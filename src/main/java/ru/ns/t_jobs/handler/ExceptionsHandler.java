@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.ns.t_jobs.auth.credentials.Credentials;
 import ru.ns.t_jobs.handler.dto.ExceptionResponse;
+import ru.ns.t_jobs.handler.exception.BadRequestException;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -38,6 +39,14 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
     public ExceptionResponse notFoundException(NoSuchElementException e) {
         long id = atomicLong.getAndIncrement();
         log(e.getMessage(), id, HttpStatus.NOT_FOUND);
+        return new ExceptionResponse(e.getMessage(), id);
+    }
+
+    @ExceptionHandler({BadRequestException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse badRequestException(BadRequestException e) {
+        long id = atomicLong.getAndIncrement();
+        log(e.getMessage(), id, HttpStatus.BAD_REQUEST);
         return new ExceptionResponse(e.getMessage(), id);
     }
 
