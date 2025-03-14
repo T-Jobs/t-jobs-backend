@@ -86,5 +86,10 @@ public class InterviewControllerImpl implements InterviewController {
     public void approveTime(long interviewId) {
         interviewService.approveTime(interviewId);
     }
+
+    @Override
+    public void declinePickedTime(long interviewId) {
+        interviewService.declinePickedTime(interviewId);
+    }
 }
 

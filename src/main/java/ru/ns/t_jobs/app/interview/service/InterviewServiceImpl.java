@@ -276,6 +276,28 @@ public class InterviewServiceImpl implements InterviewService {
         }
     }
 
+    @Override
+    public void declinePickedTime(long interviewId) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> noSuchInterviewException(interviewId));
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS
+                || interview.getDatePicked() == null
+                || !Objects.equals(interview.getInterviewer().getId(), ContextUtils.getCurrentUserStaffId())) {
+            throw new RuntimeException();
+        }
+
+        int pos = interview.getInterviewOrder();
+        Track t = interview.getTrack();
+        if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
+            interview.setDatePicked(null);
+            interview.setDateApproved(false);
+            interviewRepository.save(interview);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
     private void validateInterviewOrder(Track track) {
         if (track.getInterviews() == null) return;
 

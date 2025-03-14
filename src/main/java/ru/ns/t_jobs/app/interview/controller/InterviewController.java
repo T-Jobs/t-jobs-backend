@@ -62,4 +62,7 @@ public interface InterviewController {
 
     @PostMapping("/approve-time")
     void approveTime(@RequestParam("interview_id") long interviewId);
+
+    @PostMapping("/decline-time")
+    void declinePickedTime(@RequestParam("interview_id") long interviewId);
 }

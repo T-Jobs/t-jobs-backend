@@ -23,4 +23,5 @@ public interface InterviewService {
     void setLink(long interviewId, String link);
     void setFeedback(long interviewId, boolean success, String feedback);
     void approveTime(long interviewId);
+    void declinePickedTime(long interviewId);
 }
