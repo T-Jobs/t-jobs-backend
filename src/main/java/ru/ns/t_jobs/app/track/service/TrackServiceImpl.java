@@ -8,7 +8,6 @@ import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
-import ru.ns.t_jobs.app.interview.entity.InterviewType;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.staff.entity.StaffRepository;
 import ru.ns.t_jobs.app.track.dto.TrackConvertor;
@@ -121,5 +120,36 @@ public class TrackServiceImpl implements TrackService {
         trackRepository.save(t);
 
         interviewRepository.deleteAll(toDelete);
+    }
+
+    @Override
+    public TrackInfoDto createTrack(long candidateId, long vacancyId) {
+        Candidate c = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> noSuchCandidateException(candidateId));
+
+        Vacancy v = vacancyRepository.findById(candidateId)
+                .orElseThrow(() -> noSuchVacancyException(vacancyId));
+        Staff s = staffRepository.getReferenceById(ContextUtils.getCurrentUserStaffId());
+
+        Track newTrack = Track.builder()
+                .hr(s)
+                .finished(false)
+                .lastStatus(InterviewStatus.NONE)
+                .hr(s)
+                .candidate(c)
+                .vacancy(v)
+                .build();
+
+        var res = trackRepository.save(newTrack);
+        List<Interview> interviews = InterviewConvertor.interviews(v.getBaseInterviews(), res);
+        interviews = interviewRepository.saveAll(interviews);
+
+        Staff interviewer = staffRepository.findRandomStaffByInterviewType(interviews.getFirst().getInterviewType())
+                .orElseThrow();
+        interviews.getFirst().setInterviewer(interviewer);
+        interviewRepository.save(interviews.getFirst());
+
+        res.setInterviews(interviews);
+        return TrackConvertor.trackInfoDto(res);
     }
 }

@@ -20,9 +20,12 @@ public interface TrackController {
     @PostMapping("/approve-application")
     TrackInfoDto approveApplication(@RequestParam("candidate_id") long candidateId, @RequestParam("vacancy_id") long vacancyId);
 
-    @PostMapping("track/set-hr")
+    @PostMapping("/set-hr")
     void setHr(@RequestParam("track_id") long trackId, @RequestParam("hr_id") long hrId);
 
-    @PostMapping("track/finish")
+    @PostMapping("/finish")
     void finishTrack(@RequestParam("id") long trackId);
+
+    @PostMapping("/create-track")
+    TrackInfoDto createTrack(@RequestParam("candidate_id") long candidateId, @RequestParam("vacancyId") long vacancyId);
 }
