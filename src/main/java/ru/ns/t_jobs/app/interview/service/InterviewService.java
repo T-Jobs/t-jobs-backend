@@ -20,4 +20,6 @@ public interface InterviewService {
     void setAutoInterviewer(long interviewId);
     void setDate(long interviewId, LocalDateTime date);
     void setAutoDate(long interviewId);
+    void setLink(long interviewId, String link);
+    void setFeedback(long interviewId, boolean success, String feedback);
 }

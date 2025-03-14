@@ -71,4 +71,15 @@ public class InterviewControllerImpl implements InterviewController {
     public InterviewDto addInterview(CreateInterviewDto createInterviewDto) {
         return interviewService.addInterview(createInterviewDto);
     }
+
+    @Override
+    public void setLink(long interviewId, String link) {
+        interviewService.setLink(interviewId, link);
+    }
+
+    @Override
+    public void setFeedback(long interviewId, boolean success, String feedback) {
+        interviewService.setFeedback(interviewId, success, feedback);
+    }
 }
+

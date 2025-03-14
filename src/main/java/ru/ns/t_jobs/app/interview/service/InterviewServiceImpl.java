@@ -213,6 +213,47 @@ public class InterviewServiceImpl implements InterviewService {
         }
     }
 
+    @Override
+    public void setLink(long interviewId, String link) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> noSuchInterviewException(interviewId));
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
+            throw new RuntimeException();
+        }
+
+        interview.setLink(link);
+        interviewRepository.save(interview);
+    }
+
+    @Override
+    public void setFeedback(long interviewId, boolean success, String feedback) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> noSuchInterviewException(interviewId));
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS) {
+            throw new RuntimeException();
+        }
+
+        int pos = interview.getInterviewOrder();
+        Track t = interview.getTrack();
+        if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
+            interview.setFeedback(feedback);
+            if (success) {
+                interview.setStatus(InterviewStatus.SUCCESS);
+            } else {
+                interview.setStatus(InterviewStatus.FAILED);
+            }
+            interviewRepository.save(interview);
+
+            t = trackRepository.getReferenceById(t.getId());
+            updateLastStatus(t);
+            findInterviewerIfNeeded(t);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
     private void validateInterviewOrder(Track track) {
         if (track.getInterviews() == null) return;
 

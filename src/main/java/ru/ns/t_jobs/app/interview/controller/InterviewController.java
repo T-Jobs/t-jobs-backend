@@ -53,4 +53,10 @@ public interface InterviewController {
 
     @PostMapping("/set-auto-date")
     void setAutoDate(@RequestParam("interview_id") long interviewId);
+
+    @PostMapping("/set-link")
+    void setLink(@RequestParam("interview_id") long interviewId, @RequestParam("link") String link);
+
+    @PostMapping("/set-feedback")
+    void setFeedback(@RequestParam("interview_id") long interviewId, @RequestParam("success") boolean success, @RequestParam("feedback") String feedback);
 }
