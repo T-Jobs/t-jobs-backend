@@ -18,6 +18,7 @@ import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.staff.entity.StaffRepository;
 import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.track.entity.TrackRepository;
+import ru.ns.t_jobs.auth.util.ContextUtils;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 
 import java.time.LocalDateTime;
@@ -249,6 +250,27 @@ public class InterviewServiceImpl implements InterviewService {
             t = trackRepository.getReferenceById(t.getId());
             updateLastStatus(t);
             findInterviewerIfNeeded(t);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public void approveTime(long interviewId) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> noSuchInterviewException(interviewId));
+
+        if (interview.getStatus() == InterviewStatus.FAILED || interview.getStatus() == InterviewStatus.SUCCESS
+                || interview.getDatePicked() == null || interview.isDateApproved()
+                || !Objects.equals(interview.getInterviewer().getId(), ContextUtils.getCurrentUserStaffId())) {
+            throw new RuntimeException();
+        }
+
+        int pos = interview.getInterviewOrder();
+        Track t = interview.getTrack();
+        if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
+            interview.setDateApproved(true);
+            interviewRepository.save(interview);
         } else {
             throw new RuntimeException();
         }

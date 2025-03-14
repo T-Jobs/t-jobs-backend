@@ -81,5 +81,10 @@ public class InterviewControllerImpl implements InterviewController {
     public void setFeedback(long interviewId, boolean success, String feedback) {
         interviewService.setFeedback(interviewId, success, feedback);
     }
+
+    @Override
+    public void approveTime(long interviewId) {
+        interviewService.approveTime(interviewId);
+    }
 }
 

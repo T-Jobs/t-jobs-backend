@@ -59,4 +59,7 @@ public interface InterviewController {
 
     @PostMapping("/set-feedback")
     void setFeedback(@RequestParam("interview_id") long interviewId, @RequestParam("success") boolean success, @RequestParam("feedback") String feedback);
+
+    @PostMapping("/approve-time")
+    void approveTime(@RequestParam("interview_id") long interviewId);
 }

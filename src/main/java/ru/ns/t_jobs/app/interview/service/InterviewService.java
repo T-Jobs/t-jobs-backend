@@ -22,4 +22,5 @@ public interface InterviewService {
     void setAutoDate(long interviewId);
     void setLink(long interviewId, String link);
     void setFeedback(long interviewId, boolean success, String feedback);
+    void approveTime(long interviewId);
 }
