@@ -51,12 +51,12 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                                 .requestMatchers(HttpMethod.DELETE, "/interview/**").hasRole("HR")
                                 .requestMatchers("/user/follow-vacancy/**", "/user/vacancies").hasAnyRole("HR", "TL")
                                 .requestMatchers(interviewerPaths).hasRole("INTERVIEWER")
-//                                .requestMatchers("/bot/api/**").hasRole("BOT")
+                                .requestMatchers("/bot/api/**").hasRole("BOT")
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authProvider)
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(botTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(botTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

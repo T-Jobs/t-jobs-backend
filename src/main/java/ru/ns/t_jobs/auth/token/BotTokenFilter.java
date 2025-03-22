@@ -48,15 +48,3 @@ public class BotTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-
-@interface A {
-
-}
-
-class Sobaka implements A {
-
-    @Override
-    public Class<? extends Annotation> annotationType() {
-        return null;
-    }
-}
