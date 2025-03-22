@@ -1,0 +1,57 @@
+package ru.ns.t_jobs.tg;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import ru.ns.t_jobs.app.candidate.entity.Candidate;
+import ru.ns.t_jobs.app.candidate.entity.CandidateRepository;
+import ru.ns.t_jobs.app.track.entity.Track;
+import ru.ns.t_jobs.app.vacancy.dto.VacancyConvertor;
+import ru.ns.t_jobs.app.vacancy.dto.VacancyDto;
+import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
+import ru.ns.t_jobs.handler.exception.BadRequestException;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/bot/api")
+public class TgBotController {
+
+    private final NewCandidateRepository newCandidateRepository;
+    private final CandidateRepository candidateRepository;
+
+    @PostMapping("/register-chat-id")
+    void registerChatId(@RequestParam("chat-id") long chatId) {
+        Optional<NewCandidate> newCandidate = newCandidateRepository.findByChatId(chatId);
+        Optional<Candidate> candidate = candidateRepository.findByChatId(chatId);
+        if (newCandidate.isPresent() || candidate.isPresent()) return;
+
+        newCandidateRepository.save(new NewCandidate(null, chatId));
+    }
+
+    @GetMapping("/filled-forms")
+    boolean filledForms(@RequestParam("chat-id") long chatId) {
+        Optional<Candidate> candidate = candidateRepository.findByChatId(chatId);
+        return candidate.isPresent();
+    }
+
+    @GetMapping("/get-users-vacancies")
+    List<VacancyDto> getUsersCurrentVacancies(@RequestParam("chat-id") long chatId) {
+        Candidate candidate = candidateRepository.findByChatId(chatId)
+                .orElseThrow(() -> new BadRequestException("No registered users with %d chat id".formatted(chatId)));
+
+        return VacancyConvertor.vacancyDtos(
+                candidate.getTracks().stream()
+                        .filter(t -> !t.isFinished())
+                        .map(Track::getVacancy)
+                        .toList()
+        );
+    }
+
+
+}

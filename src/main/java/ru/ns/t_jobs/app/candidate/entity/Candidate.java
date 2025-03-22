@@ -59,4 +59,7 @@ public class Candidate {
             inverseJoinColumns = @JoinColumn(name = "vacancy_id")
     )
     private List<Vacancy> appliedVacancies;
+
+    @Column(name = "chat_id")
+    private long chatId;
 }
