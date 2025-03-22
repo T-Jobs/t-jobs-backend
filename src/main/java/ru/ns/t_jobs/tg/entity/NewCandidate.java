@@ -1,4 +1,4 @@
-package ru.ns.t_jobs.tg;
+package ru.ns.t_jobs.tg.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
