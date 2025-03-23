@@ -57,18 +57,19 @@ INSERT INTO credentials (staff_id, login, password) VALUES
 CREATE TABLE candidate (
     id          SERIAL,
     name        VARCHAR(50) NOT NULL,
-    surname     VARCHAR(50) ,
+    surname     VARCHAR(50),
     photo_url   TEXT,
-    tg_id       VARCHAR(50) ,
-    town        VARCHAR(50) ,
+    tg_id       VARCHAR(50),
+    town        VARCHAR(50),
+    chat_id     BIGINT UNIQUE,
 
     PRIMARY KEY (id)
 );
 
-INSERT INTO candidate (name, surname, tg_id, town) VALUES
-    ('Алексей', 'Трясков', '@4rter', 'Sp5'),    
-    ('Илья', 'Секунов', '@ilyaSekunov', 'Канзас'),     
-    ('Александр', 'Кулюкин', '@alexkul', 'Ченазес');     
+INSERT INTO candidate (name, surname, tg_id, town, chat_id) VALUES
+    ('Алексей', 'Трясков', 'ale4rter', 'Sp5', 228),
+    ('Илья', 'Секунов', 'ilyaSekunov', 'Канзас', 1063386066),
+    ('Александр', 'Кулюкин', 'kula1ex', 'Ченазес', 1293444611);
 
 CREATE TABLE vacancy (
     id          SERIAL,
@@ -257,3 +258,13 @@ CREATE TABLE candidate_applications (
 
 INSERT INTO candidate_applications (candidate_id, vacancy_id) VALUES
     (1, 1), (2, 2);
+
+CREATE TABLE new_candidate (
+    id      SERIAL,
+    chat_id BIGINT UNIQUE,
+
+    PRIMARY KEY (id)
+);
+
+INSERT INTO new_candidate (chat_id) VALUES
+    (1), (2);

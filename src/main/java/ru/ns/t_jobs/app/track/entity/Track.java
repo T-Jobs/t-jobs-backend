@@ -58,4 +58,14 @@ public class Track {
 
     @OneToMany(mappedBy = "track")
     private List<Interview> interviews;
+
+    public Interview getCurrentInterview() {
+        for (Interview i : interviews) {
+            if (i.getStatus() != InterviewStatus.FAILED && i.getStatus() != InterviewStatus.SUCCESS) {
+                return i;
+            }
+        }
+
+        return null;
+    }
 }

@@ -21,6 +21,14 @@ public interface VacancyRepository extends PagingAndSortingRepository<Vacancy, L
                                   @Param("salary") int lowerBound,
                                   Pageable pageable);
 
+    @Query("SELECT v FROM Vacancy v JOIN v.tags t " +
+            "WHERE t.id IN :tagIds AND v.salaryMax >= :salary " +
+            "GROUP BY v.id HAVING COUNT(t.id) >= :tagCount")
+    List<Vacancy> findAllByTags(@Param("tagIds") List<Long> tagIds,
+                                @Param("tagCount") long tagCount,
+                                @Param("salary") int lowerBound,
+                                Pageable pageable);
+
     @Query("SELECT v FROM Vacancy v " +
             "WHERE v.salaryMax >= :salary " +
             "AND lower(v.name) LIKE %:text%")
