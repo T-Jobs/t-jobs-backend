@@ -35,6 +35,9 @@ public class Resume {
     @JoinColumn(name = "candidate_id", referencedColumnName = "id")
     private Candidate candidate;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "salary_min")
     private Integer salaryMin;
 

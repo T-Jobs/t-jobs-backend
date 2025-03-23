@@ -49,7 +49,7 @@ public class FormsController {
         Resume resume = Resume.builder()
                 .date(form.getDate().toLocalDate())
                 .candidate(candidate)
-                // TODO: add resume name
+                .name(form.getName())
                 .description(form.getDescription())
                 .salaryMin(form.getSalaryMin())
                 .tags(tagRepository.findByNameIn(form.getTagNames()))

@@ -10,7 +10,7 @@ public class ResumeBotConvertor {
     public static ResumeShortDto resumeShortDto(Resume r) {
         return new ResumeShortDto(
                 r.getId(),
-                "Default name", //TODO: Add name to resume
+                r.getName(),
                 r.getSalaryMin(),
                 r.getTags().stream().map(Tag::getName).toList()
         );
@@ -19,7 +19,7 @@ public class ResumeBotConvertor {
     public static ResumeFullDto resumeFullDto(Resume r) {
         return new ResumeFullDto(
                 r.getId(),
-                "Default name", // TODO: Add name to resume
+                r.getName(),
                 r.getSalaryMin(),
                 r.getTags().stream().map(Tag::getName).toList(),
                 r.getDescription()

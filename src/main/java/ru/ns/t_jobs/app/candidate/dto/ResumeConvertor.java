@@ -10,6 +10,7 @@ public class ResumeConvertor {
         return new ResumeDto(
                 r.getId(),
                 r.getCandidate().getId(),
+                r.getName(),
                 r.getSalaryMin(),
                 r.getDescription(),
                 TagConvertor.tagDtos(r.getTags()),

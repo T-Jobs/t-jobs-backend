@@ -10,6 +10,7 @@ import java.util.List;
 public record ResumeDto(
         long id,
         @JsonProperty("candidate_id") long candidateId,
+        String name,
         @JsonProperty("salary_min") Integer salaryMin,
         String description,
         List<TagDto> tags,
