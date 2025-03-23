@@ -21,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.ns.t_jobs.auth.credentials.CredentialsRepository;
 import ru.ns.t_jobs.auth.token.BotTokenFilter;
+import ru.ns.t_jobs.auth.token.FormsTokenFilter;
 import ru.ns.t_jobs.auth.token.JwtTokenFilter;
 
 @Configuration
@@ -36,7 +37,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    AuthenticationProvider authProvider,
                                                    JwtTokenFilter tokenFilter,
-                                                   BotTokenFilter botTokenFilter) throws Exception {
+                                                   BotTokenFilter botTokenFilter,
+                                                   FormsTokenFilter formsTokenFilter) throws Exception {
         String[] hrPaths = {"/user/tracks", "/vacancy/create", "/vacancy/edit/**",
                 "/track/approve-application", "/track/create", "/track/set-hr", "/track/finish",
                 "/interview/set-interviewer", "/interview/set-auto-interviewer", "/interview/set-date",
@@ -57,6 +59,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .authenticationProvider(authProvider)
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(botTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(formsTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

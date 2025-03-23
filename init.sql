@@ -67,7 +67,7 @@ CREATE TABLE candidate (
 );
 
 INSERT INTO candidate (name, surname, tg_id, town, chat_id) VALUES
-    ('Алексей', 'Трясков', 'ale4rter', 'Sp5', null),
+    ('Алексей', 'Трясков', 'ale4rter', 'Sp5', 228),
     ('Илья', 'Секунов', 'ilyaSekunov', 'Канзас', 1063386066),
     ('Александр', 'Кулюкин', 'kula1ex', 'Ченазес', 1293444611);
 
@@ -261,7 +261,10 @@ INSERT INTO candidate_applications (candidate_id, vacancy_id) VALUES
 
 CREATE TABLE new_candidate (
     id      SERIAL,
-    chat_id BIGINT,
+    chat_id BIGINT UNIQUE,
 
     PRIMARY KEY (id)
 );
+
+INSERT INTO new_candidate (chat_id) VALUES
+    (1), (2);

@@ -60,15 +60,12 @@ public class Track {
     private List<Interview> interviews;
 
     public Interview getCurrentInterview() {
-        Interview res = null;
-
         for (Interview i : interviews) {
             if (i.getStatus() != InterviewStatus.FAILED && i.getStatus() != InterviewStatus.SUCCESS) {
-                res = i;
-                break;
+                return i;
             }
         }
 
-        return res;
+        return null;
     }
 }
