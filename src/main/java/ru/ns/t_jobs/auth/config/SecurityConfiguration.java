@@ -38,7 +38,9 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                                                    AuthenticationProvider authProvider,
                                                    JwtTokenFilter tokenFilter,
                                                    BotTokenFilter botTokenFilter,
-                                                   FormsTokenFilter formsTokenFilter) throws Exception {
+                                                   FormsTokenFilter formsTokenFilter,
+                                                   CustomAuthenticationEntryPoint authenticationEntryPoint,
+                                                   CustomAccessDeniedHandler accessDeniedHandler) throws Exception {
         String[] hrPaths = {"/user/tracks", "/vacancy/create", "/vacancy/edit/**",
                 "/track/approve-application", "/track/create", "/track/set-hr", "/track/finish",
                 "/interview/set-interviewer", "/interview/set-auto-interviewer", "/interview/set-date",
@@ -60,6 +62,9 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(botTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(formsTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(c ->
+                        c.authenticationEntryPoint(authenticationEntryPoint)
+                                .accessDeniedHandler(accessDeniedHandler))
                 .build();
     }
 

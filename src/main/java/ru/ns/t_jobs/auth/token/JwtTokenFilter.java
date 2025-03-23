@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.ns.t_jobs.auth.credentials.Credentials;
 import ru.ns.t_jobs.auth.credentials.CredentialsRepository;
+import ru.ns.t_jobs.auth.util.ContextUtils;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -28,11 +29,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().contains("/login")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         final String authHeader = request.getHeader(HEADER_NAME);
         final String token;
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
@@ -56,6 +52,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     userDetails.getAuthorities()
             );
             SecurityContextHolder.getContext().setAuthentication(authToken);
+            ContextUtils.authenticated.set(true);
         }
         filterChain.doFilter(request, response);
     }

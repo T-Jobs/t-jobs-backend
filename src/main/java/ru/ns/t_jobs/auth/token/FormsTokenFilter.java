@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.ns.t_jobs.auth.util.ContextUtils;
 
 import java.io.IOException;
 import java.util.Set;
@@ -44,6 +45,7 @@ public class FormsTokenFilter extends OncePerRequestFilter {
                 null,
                 Set.of(new SimpleGrantedAuthority("ROLE_BOT"))
         ));
+        ContextUtils.authenticated.set(true);
         filterChain.doFilter(request, response);
     }
 }
