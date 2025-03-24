@@ -12,7 +12,6 @@ import ru.ns.t_jobs.app.interview.dto.CreateInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RequestMapping("/interview")

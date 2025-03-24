@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import ru.ns.t_jobs.auth.util.ContextUtils;
 
 import java.io.IOException;
 
@@ -16,7 +15,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        if (!ContextUtils.isAuthenticated()) response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-        else response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Unauthorized");
+        response.getWriter().flush();
     }
 }

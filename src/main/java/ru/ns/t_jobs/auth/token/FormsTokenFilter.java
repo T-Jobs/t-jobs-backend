@@ -45,7 +45,6 @@ public class FormsTokenFilter extends OncePerRequestFilter {
                 null,
                 Set.of(new SimpleGrantedAuthority("ROLE_BOT"))
         ));
-        ContextUtils.authenticated.set(true);
         filterChain.doFilter(request, response);
     }
 }
