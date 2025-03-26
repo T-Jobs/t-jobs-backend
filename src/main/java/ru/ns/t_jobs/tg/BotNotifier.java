@@ -9,6 +9,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
+import ru.ns.t_jobs.app.candidate.entity.Candidate;
+import ru.ns.t_jobs.app.candidate.entity.Resume;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
@@ -37,7 +39,6 @@ public class BotNotifier {
         } catch (IOException ignored) {
         }
     }
-
 
     public static void notifyCanceledInterview(Interview interview) {
         String message = """
@@ -88,6 +89,16 @@ public class BotNotifier {
         sendMessage(interview.getTrack().getCandidate().getChatId(), message);
     }
 
+    public static void notifyDateDeclined(Interview interview) {
+        String message = """
+                ⏰ Время проведение секции '%s' для вакансии '%s' было отменено. Требуется согласование.
+                """.formatted(
+                interview.getInterviewType().getName(),
+                interview.getTrack().getVacancy().getName()
+        );
+        sendMessage(interview.getTrack().getCandidate().getChatId(), message);
+    }
+
     public static void notifyApprovedApplication(Track track) {
         String message = """
                 🎟 Заявка на отбор на вакансию '%s' была одобрена.
@@ -113,5 +124,28 @@ public class BotNotifier {
                 track.getVacancy().getName()
         );
         sendMessage(track.getCandidate().getChatId(), message);
+    }
+
+    public static void notifyAboutMeFormAccepted(long chatId) {
+        String message = "🔃 Гугл форма \"О себе\" успешна принята.";
+        sendMessage(chatId, message);
+    }
+
+    public static void notifyResumeAccepted(Resume resume) {
+        String message = """
+                🔃 Резюме '%s было загружено.
+                """.formatted(
+                resume.getName()
+        );
+        sendMessage(resume.getCandidate().getChatId(), message);
+    }
+
+    public static void notifySuccessfullyApplied(long chatId, Vacancy vacancy) {
+        String message = """
+                💼 Заявка на вакансию '%s' была успешна подана.
+                """.formatted(
+                vacancy.getName()
+        );
+        sendMessage(chatId, message);
     }
 }

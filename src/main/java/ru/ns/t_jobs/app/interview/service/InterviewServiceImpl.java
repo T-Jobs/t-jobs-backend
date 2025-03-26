@@ -313,6 +313,7 @@ public class InterviewServiceImpl implements InterviewService {
             interview.setDatePicked(null);
             interview.setDateApproved(false);
             interviewRepository.save(interview);
+            BotNotifier.notifyDateDeclined(interview);
         } else {
             throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }
