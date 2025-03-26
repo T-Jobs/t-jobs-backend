@@ -18,6 +18,7 @@ import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 import ru.ns.t_jobs.auth.util.ContextUtils;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
+import ru.ns.t_jobs.tg.BotNotifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,8 @@ public class TrackServiceImpl implements TrackService {
         interviewRepository.save(interviews.getFirst());
 
         res.setInterviews(interviews);
+
+        BotNotifier.notifyApprovedApplication(res);
         return TrackConvertor.trackInfoDto(res);
     }
 
@@ -126,6 +129,7 @@ public class TrackServiceImpl implements TrackService {
         trackRepository.save(t);
 
         interviewRepository.deleteAll(toDelete);
+        BotNotifier.notifyFinishedTrack(t);
     }
 
     @Override
@@ -156,6 +160,7 @@ public class TrackServiceImpl implements TrackService {
         interviewRepository.save(interviews.getFirst());
 
         res.setInterviews(interviews);
+        BotNotifier.notifyStartedTrack(res);
         return TrackConvertor.trackInfoDto(res);
     }
 }

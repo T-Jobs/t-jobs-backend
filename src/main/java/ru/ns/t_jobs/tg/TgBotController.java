@@ -110,6 +110,7 @@ public class TgBotController {
         Candidate candidate = getCurrentUser(chatId);
         Track track = getUsersTrack(chatId, trackId);
         trackService.finishTrack(trackId);
+        BotNotifier.notifyFinishedTrack(track);
     }
 
     @GetMapping("/track/available-time")
@@ -154,6 +155,7 @@ public class TgBotController {
 
         user.getAppliedVacancies().add(vacancy);
         candidateRepository.save(user);
+        BotNotifier.notifySuccessfullyApplied(chatId, vacancy);
     }
 
     @GetMapping("/resume/all")

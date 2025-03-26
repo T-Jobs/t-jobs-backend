@@ -13,6 +13,7 @@ import ru.ns.t_jobs.app.tag.entity.TagRepository;
 import ru.ns.t_jobs.form.dto.AboutMeForm;
 import ru.ns.t_jobs.form.dto.ResumeForm;
 import ru.ns.t_jobs.handler.exception.BadRequestException;
+import ru.ns.t_jobs.tg.BotNotifier;
 import ru.ns.t_jobs.tg.entity.NewCandidate;
 import ru.ns.t_jobs.tg.entity.NewCandidateRepository;
 
@@ -39,6 +40,8 @@ public class FormsController {
                 .surname(form.getSurname())
                 .build()
         );
+
+        BotNotifier.notifyAboutMeFormAccepted(form.getChatId());
     }
 
     @PostMapping("/resume")
@@ -56,6 +59,7 @@ public class FormsController {
                 .build();
 
         resumeRepository.save(resume);
+        BotNotifier.notifyResumeAccepted(resume);
     }
 
 }

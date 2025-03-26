@@ -20,6 +20,7 @@ import ru.ns.t_jobs.app.track.entity.TrackRepository;
 import ru.ns.t_jobs.auth.util.ContextUtils;
 import ru.ns.t_jobs.handler.exception.BadRequestException;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
+import ru.ns.t_jobs.tg.BotNotifier;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -97,7 +98,12 @@ public class InterviewServiceImpl implements InterviewService {
             throw new BadRequestException("Interview %d is finished.".formatted(id));
         }
 
+        if (Objects.equals(track.getCurrentInterview().getId(), interview.getId())) {
+            BotNotifier.notifyCanceledInterview(interview);
+        }
+
         interviewRepository.delete(interview);
+
         track = trackRepository.getReferenceById(track.getId());
         updateLastStatus(track);
         findInterviewerIfNeeded(track);
@@ -192,6 +198,8 @@ public class InterviewServiceImpl implements InterviewService {
 
             t.setLastStatus(InterviewStatus.WAITING_FEEDBACK);
             trackRepository.save(t);
+
+            BotNotifier.notifyDateInterview(interview);
         } else {
             throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }
@@ -251,8 +259,10 @@ public class InterviewServiceImpl implements InterviewService {
             interview.setFeedback(feedback);
             if (success) {
                 interview.setStatus(InterviewStatus.SUCCESS);
+                BotNotifier.notifySucceedInterview(interview);
             } else {
                 interview.setStatus(InterviewStatus.FAILED);
+                BotNotifier.notifyFailedInterview(interview);
             }
             interviewRepository.save(interview);
 
@@ -280,6 +290,7 @@ public class InterviewServiceImpl implements InterviewService {
         if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
             interview.setDateApproved(true);
             interviewRepository.save(interview);
+            BotNotifier.notifyDateInterview(interview);
         } else {
             throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }
@@ -302,6 +313,7 @@ public class InterviewServiceImpl implements InterviewService {
             interview.setDatePicked(null);
             interview.setDateApproved(false);
             interviewRepository.save(interview);
+            BotNotifier.notifyDateDeclined(interview);
         } else {
             throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
         }

@@ -23,7 +23,9 @@ import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -60,12 +62,8 @@ public class Track {
     private List<Interview> interviews;
 
     public Interview getCurrentInterview() {
-        for (Interview i : interviews) {
-            if (i.getStatus() != InterviewStatus.FAILED && i.getStatus() != InterviewStatus.SUCCESS) {
-                return i;
-            }
-        }
-
-        return null;
+        return interviews.stream().sorted(Comparator.comparingInt(Interview::getInterviewOrder))
+                .dropWhile(i -> i.getStatus() == InterviewStatus.FAILED || i.getStatus() == InterviewStatus.SUCCESS)
+                .findFirst().orElse(null);
     }
 }
