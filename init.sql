@@ -22,7 +22,7 @@ CREATE TABLE staff (
 );
 
 INSERT INTO staff (name, surname, photo_url, interviewer_mode) VALUES
-    ('Мария', 'Грек', 'https://tatmitropolia.ru/www/images/ikony_svyatych/maksim_grek_595.jpg', FAlSE),
+    ('Мария', 'Грек', 'https://tatmitropolia.ru/www/images/ikony_svyatych/maksim_grek_595.jpg', TRUE),
     ('Эрих', 'Ремарк', 'https://brsbs.ru/sites/default/files/news/images/erih-mariya-remark.jpg', FALSE),
     ('Байрон', 'Депампадур', 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Boucher_Pompadour_Munich_04.jpg/800px-Boucher_Pompadour_Munich_04.jpg', TRUE);
 
@@ -68,8 +68,8 @@ CREATE TABLE candidate (
 
 INSERT INTO candidate (name, surname, tg_id, town, chat_id) VALUES
     ('Алексей', 'Трясков', 'ale4rter', 'Sp5', 228),
-    ('Александр', 'Кулюкин', 'kula1ex', 'Ченазес', 1293444611),
-    ('Илья', 'Секунов', 'ilyaSekunov', 'Канзас', 1063386066);
+    ('Илья', 'Секунов', 'ilyaSekunov', 'Канзас', 1063386066),
+    ('Александр', 'Кулюкин', 'kula1ex', 'Ченазес', 1293444611);
 
 CREATE TABLE vacancy (
     id          SERIAL,
@@ -166,7 +166,7 @@ CREATE TABLE base_interview (
 );
 
 INSERT INTO base_interview (interview_type_id, vacancy_id, interview_order) VALUES
-    (3, 1, 1), (3, 2, 1), (1, 1, 2), (2, 1, 3);
+    (3, 1, 0), (3, 2, 0), (1, 1, 1), (2, 1, 2);
 
 CREATE TABLE staff_vacancy (
     staff_id    BIGINT UNSIGNED NOT NULL,
@@ -258,7 +258,7 @@ CREATE TABLE candidate_applications (
 );
 
 INSERT INTO candidate_applications (candidate_id, vacancy_id) VALUES
-    (1, 1), (2, 2);
+    (1, 1), (2, 1), (3, 1), (3, 2);
 
 CREATE TABLE new_candidate (
     id      SERIAL,

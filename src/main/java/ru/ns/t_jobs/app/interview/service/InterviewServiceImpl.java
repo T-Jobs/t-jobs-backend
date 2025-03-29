@@ -289,7 +289,12 @@ public class InterviewServiceImpl implements InterviewService {
         Track t = interview.getTrack();
         if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
             interview.setDateApproved(true);
+            interview.setStatus(InterviewStatus.WAITING_FEEDBACK);
             interviewRepository.save(interview);
+
+            t.setLastStatus(InterviewStatus.WAITING_FEEDBACK);
+            trackRepository.save(t);
+
             BotNotifier.notifyDateInterview(interview);
         } else {
             throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));

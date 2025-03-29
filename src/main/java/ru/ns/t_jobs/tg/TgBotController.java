@@ -16,6 +16,7 @@ import ru.ns.t_jobs.app.candidate.entity.Resume;
 import ru.ns.t_jobs.app.candidate.entity.ResumeRepository;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
+import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
 import ru.ns.t_jobs.app.tag.entity.Tag;
 import ru.ns.t_jobs.app.track.entity.Track;
 import ru.ns.t_jobs.app.track.entity.TrackRepository;
@@ -60,7 +61,7 @@ public class TgBotController {
     private final ResumeRepository resumeRepository;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final Stream<LocalTime> BASE_TIMES = Stream.of(
+    private static final List<LocalTime> BASE_TIMES = List.of(
             LocalTime.of(12, 30),
             LocalTime.of(14, 0),
             LocalTime.of(16, 45),
@@ -110,13 +111,12 @@ public class TgBotController {
         Candidate candidate = getCurrentUser(chatId);
         Track track = getUsersTrack(chatId, trackId);
         trackService.finishTrack(trackId);
-        BotNotifier.notifyFinishedTrack(track);
     }
 
     @GetMapping("/track/available-time")
     List<String> getAvailableTimeSlots(@RequestParam("chat-id") long chatId, @RequestParam("track-id") long trackId) {
         LocalDate base = LocalDate.now();
-        return BASE_TIMES.map(t -> t.atDate(base)).map(DATE_TIME_FORMATTER::format).toList();
+        return BASE_TIMES.stream().map(t -> t.atDate(base)).map(DATE_TIME_FORMATTER::format).toList();
     }
 
     @PostMapping("/track/pick-date")
@@ -125,6 +125,8 @@ public class TgBotController {
 
         curInterview.setDatePicked(LocalDateTime.parse(date, DATE_TIME_FORMATTER));
         curInterview.setDateApproved(false);
+        curInterview.setStatus(InterviewStatus.TIME_APPROVAL);
+        curInterview.getTrack().setLastStatus(InterviewStatus.TIME_APPROVAL);
 
         interviewRepository.save(curInterview);
     }
