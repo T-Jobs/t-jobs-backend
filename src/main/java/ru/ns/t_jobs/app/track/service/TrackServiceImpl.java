@@ -67,7 +67,7 @@ public class TrackServiceImpl implements TrackService {
             throw noSuchApplicationException(candidateId, vacancyId);
         }
 
-        Vacancy v = vacancyRepository.findById(candidateId)
+        Vacancy v = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> noSuchVacancyException(vacancyId));
         Staff s = staffRepository.getReferenceById(ContextUtils.getCurrentUserStaffId());
         c.getAppliedVacancies().remove(v);
