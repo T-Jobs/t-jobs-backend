@@ -15,7 +15,7 @@ public class TrackBotConvertor {
         return new TrackBotDto(
                 t.getId(),
                 t.getVacancy().getName(),
-                InterviewBotConvertor.interviewBotDto(t.getCurrentInterview())
+                t.getCurrentInterview() == null ? null : InterviewBotConvertor.interviewBotDto(t.getCurrentInterview())
         );
     }
 }

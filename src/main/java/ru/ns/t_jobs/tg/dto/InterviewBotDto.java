@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public record InterviewBotDto(
         long id,
         InterviewStatus status,
+        @JsonProperty("interview_name") String interviewName,
         @JsonProperty("interviewer_name") String interviewerName,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime date
 ) {

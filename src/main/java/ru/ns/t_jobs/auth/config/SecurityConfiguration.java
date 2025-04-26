@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -45,7 +44,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         String[] hrPaths = {"/user/tracks", "/vacancy/create", "/vacancy/edit/**",
                 "/track/approve-application", "/track/create", "/track/set-hr", "/track/finish",
                 "/interview/set-interviewer", "/interview/set-auto-interviewer", "/interview/set-date",
-                "/interview/set-auto-date", "/interview/set-link", "/interview/set-feedback", "/interview/add-to-track"};
+                "/interview/set-auto-date", "/interview/set-link", "/interview/add-to-track"};
         String[] interviewerPaths = {"/user/set-interviewer-mode", "/user/competencies"};
 
         return http.csrf(AbstractHttpConfigurer::disable)
