@@ -117,12 +117,12 @@ public class InterviewServiceImpl implements InterviewService {
         Interview interview = Interview.builder()
                 .interviewType(type)
                 .track(t)
-                .dateApproved(false)
-                .datePicked(null)
+                .dateApproved(createInterviewDto.date() != null)
+                .datePicked(createInterviewDto.date())
                 .interviewer(null)
                 .status(InterviewStatus.NONE)
                 .feedback(null)
-                .link(null)
+                .link(createInterviewDto.link())
                 .interviewOrder(Objects.requireNonNullElse(t.getInterviews(), List.of()).size())
                 .build();
 
