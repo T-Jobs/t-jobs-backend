@@ -28,4 +28,7 @@ public interface TrackController {
 
     @PostMapping("/create")
     TrackInfoDto createTrack(@RequestParam("candidate_id") long candidateId, @RequestParam("vacancy_id") long vacancyId);
+
+    @PostMapping("/continue")
+    void continueTrack(@RequestParam("id") long trackId);
 }

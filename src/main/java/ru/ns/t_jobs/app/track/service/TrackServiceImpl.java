@@ -8,6 +8,7 @@ import ru.ns.t_jobs.app.interview.dto.InterviewConvertor;
 import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewRepository;
 import ru.ns.t_jobs.app.interview.entity.InterviewStatus;
+import ru.ns.t_jobs.app.interview.service.InterviewService;
 import ru.ns.t_jobs.app.staff.entity.Staff;
 import ru.ns.t_jobs.app.staff.entity.StaffRepository;
 import ru.ns.t_jobs.app.track.dto.TrackConvertor;
@@ -17,6 +18,7 @@ import ru.ns.t_jobs.app.track.entity.TrackRepository;
 import ru.ns.t_jobs.app.vacancy.entity.Vacancy;
 import ru.ns.t_jobs.app.vacancy.entity.VacancyRepository;
 import ru.ns.t_jobs.auth.util.ContextUtils;
+import ru.ns.t_jobs.handler.exception.BadRequestException;
 import ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory;
 import ru.ns.t_jobs.tg.BotNotifier;
 
@@ -40,6 +42,7 @@ public class TrackServiceImpl implements TrackService {
     private final VacancyRepository vacancyRepository;
     private final StaffRepository staffRepository;
     private final InterviewRepository interviewRepository;
+    private final InterviewService interviewService;
 
     @Override
     public TrackInfoDto getTrack(long id) {
@@ -162,5 +165,21 @@ public class TrackServiceImpl implements TrackService {
         res.setInterviews(interviews);
         BotNotifier.notifyStartedTrack(res);
         return TrackConvertor.trackInfoDto(res);
+    }
+
+    @Override
+    public void continueTrack(long trackId) {
+        Track t = trackRepository.findById(trackId).orElseThrow(() -> noSuchTrackException(trackId));
+
+        if (t.isFinished()) {
+            throw new BadRequestException("Track %d is finished.".formatted(trackId));
+        }
+
+
+
+        Interview i = t.getInterviews().stream().filter(e -> e.getStatus() == InterviewStatus.FAILED).findFirst()
+                .orElseThrow(() -> new BadRequestException("Track has not any failed interview."));
+
+        interviewService.setFeedback(i, true, i.getFeedback());
     }
 }

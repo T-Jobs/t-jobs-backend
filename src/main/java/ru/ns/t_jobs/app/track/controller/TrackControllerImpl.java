@@ -42,4 +42,9 @@ public class TrackControllerImpl implements TrackController {
     public TrackInfoDto createTrack(long candidateId, long vacancyId) {
         return trackService.createTrack(candidateId, vacancyId);
     }
+
+    @Override
+    public void continueTrack(long trackId) {
+        trackService.continueTrack(trackId);
+    }
 }

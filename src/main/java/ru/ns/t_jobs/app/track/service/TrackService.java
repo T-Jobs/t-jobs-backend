@@ -13,4 +13,5 @@ public interface TrackService {
     void setHr(long trackId, long hrId);
     void finishTrack(long id);
     TrackInfoDto createTrack(long candidateId, long vacancyId);
+    void continueTrack(long trackId);
 }

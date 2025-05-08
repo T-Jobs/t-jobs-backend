@@ -3,6 +3,7 @@ package ru.ns.t_jobs.app.interview.service;
 import ru.ns.t_jobs.app.interview.dto.BaseInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.CreateInterviewDto;
 import ru.ns.t_jobs.app.interview.dto.InterviewDto;
+import ru.ns.t_jobs.app.interview.entity.Interview;
 import ru.ns.t_jobs.app.interview.entity.InterviewType;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public interface InterviewService {
     void setAutoDate(long interviewId);
     void setLink(long interviewId, String link);
     void setFeedback(long interviewId, boolean success, String feedback);
+    void setFeedback(Interview interview, boolean success, String feedback);
     void approveTime(long interviewId);
     void declinePickedTime(long interviewId);
 }

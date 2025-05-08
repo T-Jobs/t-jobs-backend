@@ -253,6 +253,11 @@ public class InterviewServiceImpl implements InterviewService {
             throw new BadRequestException("Unable to set feedback.");
         }
 
+        setFeedback(interview, success, feedback);
+    }
+
+    @Override
+    public void setFeedback(Interview interview, boolean success, String feedback) {
         int pos = interview.getInterviewOrder();
         Track t = interview.getTrack();
         if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
@@ -270,7 +275,7 @@ public class InterviewServiceImpl implements InterviewService {
             updateLastStatus(t);
             findInterviewerIfNeeded(t);
         } else {
-            throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interviewId));
+            throw new BadRequestException("Too early. Interview %d is not relevant.".formatted(interview.getId()));
         }
     }
 
