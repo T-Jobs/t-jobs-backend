@@ -322,6 +322,7 @@ public class InterviewServiceImpl implements InterviewService {
         if (pos == 0 || t.getInterviews().get(pos - 1).getStatus() == InterviewStatus.SUCCESS) {
             interview.setDatePicked(null);
             interview.setDateApproved(false);
+            interview.setStatus(InterviewStatus.NONE);
             interviewRepository.save(interview);
             BotNotifier.notifyDateDeclined(interview);
         } else {
