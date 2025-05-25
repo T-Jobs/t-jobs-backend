@@ -115,6 +115,15 @@ public class BotNotifier {
         sendMessage(track.getCandidate().getChatId(), message);
     }
 
+    public static void notifyDeclinedApplication(Candidate candidate, Vacancy vacancy) {
+        String message = """
+                😛 Заявка на отбор на вакансию _'%s'_ была отклонена\\\\.
+                """.formatted(
+                format(vacancy.getName())
+        );
+        sendMessage(candidate.getChatId(), message);
+    }
+
     public static void notifyFinishedTrack(Track track) {
         String message = """
                 🏁 Отбор на вакансию _'%s'_ был завершен\\\\.

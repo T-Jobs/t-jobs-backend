@@ -29,6 +29,11 @@ public class TrackControllerImpl implements TrackController {
     }
 
     @Override
+    public void declineApplication(long candidateId, long vacancyId) {
+        trackService.declineApplication(candidateId, vacancyId);
+    }
+
+    @Override
     public void setHr(long trackId, long hrId) {
         trackService.setHr(trackId, hrId);
     }

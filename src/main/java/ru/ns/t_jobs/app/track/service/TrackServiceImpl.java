@@ -101,6 +101,24 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
+    public void declineApplication(long candidateId, long vacancyId) {
+        Candidate c = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> noSuchCandidateException(candidateId));
+
+        if (c.getAppliedVacancies().stream().noneMatch(v -> v.getId() == vacancyId)) {
+            throw noSuchApplicationException(candidateId, vacancyId);
+        }
+
+        Vacancy v = vacancyRepository.findById(vacancyId)
+                .orElseThrow(() -> noSuchVacancyException(vacancyId));
+        Staff s = staffRepository.getReferenceById(ContextUtils.getCurrentUserStaffId());
+        c.getAppliedVacancies().remove(v);
+        candidateRepository.save(c);
+
+        BotNotifier.notifyDeclinedApplication(c, v);
+    }
+
+    @Override
     public void setHr(long trackId, long hrId) {
         Track t = trackRepository.findById(trackId).orElseThrow(() -> noSuchTrackException(trackId));
         Staff hr = staffRepository.findById(hrId).orElseThrow(() -> noSuchStaffException(hrId));

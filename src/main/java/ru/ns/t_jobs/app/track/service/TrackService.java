@@ -10,6 +10,7 @@ public interface TrackService {
     TrackInfoDto getTrack(long id);
     List<TrackInfoDto> getTracks(List<Long> ids);
     TrackInfoDto approveApplication(long candidateId, long vacancyId);
+    void declineApplication(long candidateId, long vacancyId);
     void setHr(long trackId, long hrId);
     void finishTrack(long id);
     TrackInfoDto createTrack(long candidateId, long vacancyId);
