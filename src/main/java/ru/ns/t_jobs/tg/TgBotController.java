@@ -43,7 +43,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static ru.ns.t_jobs.handler.exception.NotFoundExceptionFactory.noSuchTrackException;
 
@@ -132,17 +131,27 @@ public class TgBotController {
     }
 
     @GetMapping("/vacancy/relevant")
-    List<VacancyBotDto> getRelevantVacancies(@RequestParam("chat-id") long chatId) {
+    List<VacancyBotDto> getRelevantVacancies(@RequestParam("chat-id") long chatId, @RequestParam("page") int page, @RequestParam("page-size") int pageSize) {
         Candidate user = getCurrentUser(chatId);
-        Pageable paging = PageRequest.of(0, Integer.MAX_VALUE);
+        Pageable paging = PageRequest.of(page, pageSize);
 
-        return VacancyBotConvertor.vacancyBotDtos(
-                user.getResumes().stream().flatMap(r -> vacancyRepository.findAllByTags(
-                        r.getTags().stream().map(Tag::getId).toList(), r.getTags().size(),
-                        Objects.requireNonNullElse(r.getSalaryMin(), 0),
-                        paging
-                ).stream()).collect(Collectors.toSet())
-        );
+        return VacancyBotConvertor.vacancyBotDtos(vacancyRepository.findAll(paging).toList());
+
+//        return VacancyBotConvertor.vacancyBotDtos(
+//                user.getResumes().stream().flatMap(r -> vacancyRepository.findAllByTags(
+//                        r.getTags().stream().map(Tag::getId).toList(), r.getTags().size(),
+//                        Objects.requireNonNullElse(r.getSalaryMin(), 0),
+//                        paging
+//                ).stream()).collect(Collectors.toSet())
+//        );
+    }
+
+    @GetMapping("/vacancy")
+    VacancyBotDto getRelevantVacancies(@RequestParam("vacancy-id") long vacancyId) {
+        Vacancy v = vacancyRepository.findById(vacancyId)
+                .orElseThrow(() -> NotFoundExceptionFactory.noSuchVacancyException(vacancyId));
+
+        return VacancyBotConvertor.vacancyBotDto(v);
     }
 
     @PostMapping("/vacancy/apply")
